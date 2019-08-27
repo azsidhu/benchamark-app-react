@@ -7,4 +7,18 @@
     border: 1px #78909c solid;
     border-radius: 2px;
     padding: 80px 40px;
+    background-color:#fff;
+  }
+
+  .switchModeDiv{
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+    margin-top: 10px
+  }
+
+  .switchModeLink{
+    padding-left: 3px;
+    color: blue;
+    cursor: pointer;
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/Header';
 import '../styles/IgConnect.css';
+import '../styles/Global.css';
 import images from '../assets/images';
 
 
@@ -22,14 +23,14 @@ function IgConnect({ history }) {
                     </button>
                 </div>
                 <div className="col-sm-9 offset-sm-1">
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent:'space-between' }}>
-                        <h4 style={{ marginLeft: 5 }}>Previous crawl results</h4>
-                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div className="tableHeadContainer">
+                        <h4>Previous crawl results</h4>
+                        <div className="tableSearchContainer">
                             <label htmlFor="inputPassword">Search:</label>
-                            <input type="text" className="form-control" id="inputSearchText" placeholder="" style={{marginBottom:5, marginLeft:2}}/>
+                            <input type="text" className="form-control" id="inputSearchText"/>
                         </div>
                     </div>
-                    <table className="table" style={{ backgroundColor: '#fff', marginBottom: 1 }}>
+                    <table className="table">
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col">#</th>
@@ -52,26 +53,26 @@ function IgConnect({ history }) {
                                 <td className="detailsRow" onClick={() => history.push('/igPageResults')}>details</td>
                             </tr>
                             <tr>
-                                <th scope="row">1</th>
+                                <th scope="row">3</th>
                                 <td>07:45 19-19</td>
                                 <td>@otto</td>
                                 <td className="detailsRow" onClick={() => history.push('/igPageResults')}>details</td>
                             </tr>
                             <tr>
-                                <th scope="row">3</th>
+                                <th scope="row">4</th>
                                 <td>10:30 19-20</td>
                                 <td>@dawn.com</td>
                                 <td className="detailsRow" onClick={() => history.push('/igPageResults')}>details</td>
                             </tr>
                             <tr>
-                                <th scope="row">1</th>
+                                <th scope="row">5</th>
                                 <td>07:45 19-19</td>
                                 <td>@otto</td>
                                 <td className="detailsRow" onClick={() => history.push('/igPageResults')}>details</td>
                             </tr>
                         </tbody>
                     </table>
-                    <div style={{ float: 'right' }}>
+                    <div className="pagginationDiv">
                         <ul className="pagination">
                             <li className="page-item">
                                 <p className="page-link" aria-label="Previous">
