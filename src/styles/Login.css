@@ -1,0 +1,10 @@
+  
+  .loginRow{
+    margin-top: 10%;
+  }
+  
+  .loginColumn{
+    border: 1px #78909c solid;
+    border-radius: 2px;
+    padding: 80px 40px;
+  }

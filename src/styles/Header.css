@@ -1,0 +1,9 @@
+
+.navItem{
+    margin-left: 15px;
+    padding-bottom: 10px;
+}
+
+.navItemText{
+    cursor: pointer;
+}
