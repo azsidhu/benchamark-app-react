@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Provider } from 'react-redux'
-import configureStore from './configureStore'
+import { Provider } from 'react-redux';
+import configureStore from './configureStore';
 import LoginScreen from './containers/Login';
 import SignupScreen from './containers/Signup';
 import FbConnect from './containers/FbConnect';
