@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route } from 'react-router-dom';
+import history from './config/hisroty';
 import { Provider } from 'react-redux';
 import configureStore from './configureStore';
 import LoginScreen from './containers/Login';
@@ -10,12 +11,12 @@ import TwConnect from './containers/TwConnect';
 import IgConnected from './containers/IgConnected';
 import IgPageResults from './containers/IgPageResults';
 
-const store = configureStore()
+const store = configureStore();
 
 function App() {
   return (
     <Provider store={store}>
-      <Router>
+      <Router history={history}>
         <Switch>
           <Route exact path='/' component={LoginScreen} />
           <Route exact path='/fbconnect' component={FbConnect} />
