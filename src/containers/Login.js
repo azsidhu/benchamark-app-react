@@ -1,8 +1,12 @@
 import React from 'react';
 import '../styles/Login.css';
+import { loginUser } from "../actions/AuthActions";
+import { connect, useSelector } from "react-redux";
 
 
-function Login({ history }) {
+function Login({ history,loginUser }) {
+  const loading = useSelector(state => state.auth.loading);
+  console.log('loading: ',loading)
   return (
     <div className="container">
       <div className="row loginRow">
@@ -18,7 +22,7 @@ function Login({ history }) {
             </div>
           </form>
           <div className="col-sm-6 offset-sm-3">
-            <button type="submit" className="btn btn-primary btn-sm btn-block" onClick={()=>history.push('/fbconnect')}>Login</button>
+            <button type="submit" className="btn btn-primary btn-sm btn-block" onClick={()=>loginUser()}>Login</button>
           </div>
           <div className="switchModeDiv">
             <p>Don't have an account?</p>
@@ -30,4 +34,5 @@ function Login({ history }) {
   );
 }
 
-export default Login;
+
+export default connect(null,{ loginUser })(Login);
