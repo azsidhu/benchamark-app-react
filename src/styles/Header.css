@@ -1,22 +1,21 @@
-
-.navItem{
-    margin-left: 15px;
-    padding-bottom: 10px;
+.navItem {
+  margin-left: 15px;
+  padding-bottom: 10px;
 }
 
-.navItemText{
-    cursor: pointer;
+.navItemText {
+  cursor: pointer;
 }
 
-.logoutText{
-    font-weight: bold;
-    color: white;
+.logoutText {
+  font-weight: bold;
+  color: white;
 }
 
-.topNav{
-    padding-bottom: 0px;
+.topNav {
+  padding-bottom: 0px;
 }
 
-.logoutDiv{
-    float: right;
+.logoutDiv {
+  float: right;
 }

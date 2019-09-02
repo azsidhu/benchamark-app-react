@@ -1,24 +1,28 @@
-  
-  .loginRow{
-    margin-top: 10%;
-  }
-  
-  .loginColumn{
-    border: 1px #78909c solid;
-    border-radius: 2px;
-    padding: 80px 40px;
-    background-color:#fff;
-  }
+.loginRow {
+  margin-top: 10%;
+}
 
-  .switchModeDiv{
-    display: flex;
-    flex-direction: row;
-    margin-left: 20px;
-    margin-top: 10px
-  }
+.loginColumn {
+  border: 1px #78909c solid;
+  border-radius: 2px;
+  padding: 80px 40px;
+  background-color: #fff;
+}
 
-  .switchModeLink{
-    padding-left: 3px;
-    color: blue;
-    cursor: pointer;
-  }
+.switchModeDiv {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.switchModeLink {
+  padding-left: 3px;
+  color: blue;
+  cursor: pointer;
+}
+
+.required:after {
+  content: " *";
+  color: red;
+}

@@ -1,19 +1,19 @@
-import React from 'react';
-import { Router, Switch, Route } from 'react-router-dom';
-import history from './config/hisroty';
-import { Provider } from 'react-redux';
-import configureStore from './configureStore';
-import LoginScreen from './containers/Login';
-import SignupScreen from './containers/Signup';
-import FbConnect from './containers/FbConnect';
-import IgConnect from './containers/IgConnect';
-import TwConnect from './containers/TwConnect';
-import IgConnected from './containers/IgConnected';
-import IgPageResults from './containers/IgPageResults';
+import React from 'react'
+import { Router, Switch, Route } from 'react-router-dom'
+import history from './config/hisroty'
+import { Provider } from 'react-redux'
+import configureStore from './configureStore'
+import LoginScreen from './containers/Login'
+import SignupScreen from './containers/Signup'
+import FbConnect from './containers/FbConnect'
+import IgConnect from './containers/IgConnect'
+import TwConnect from './containers/TwConnect'
+import IgConnected from './containers/IgConnected'
+import IgPageResults from './containers/IgPageResults'
 
-const store = configureStore();
+const store = configureStore()
 
-function App() {
+function App () {
   return (
     <Provider store={store}>
       <Router history={history}>
@@ -29,7 +29,7 @@ function App() {
         </Switch>
       </Router>
     </Provider>
-  );
+  )
 }
 
-export default App;
+export default App
