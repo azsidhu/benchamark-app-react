@@ -1,0 +1,33 @@
+
+.tableHeadContainer{
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between
+}
+
+.tableHeadContainer h4{
+    margin-left: 5px;
+}
+
+.tableSearchContainer{
+    display: flex;
+    flex-direction:row;
+}
+
+.tableSearchContainer label{
+    align-self: center
+}
+
+.tableSearchContainer input{
+    margin-bottom: 5px;
+    margin-left: 2px;
+}
+
+.table{
+    background-color: #fff;
+    margin-bottom: 1px;
+}
+
+.pagginationDiv{
+    float: right;
+}

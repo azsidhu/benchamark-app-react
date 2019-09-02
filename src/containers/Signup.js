@@ -6,7 +6,7 @@ function Signup({ history }) {
   return (
     <div className="container">
       <div className="row loginRow">
-        <div className="col-sm-5 offset-sm-4 loginColumn" style={{backgroundColor:'#fff'}}>
+        <div className="col-sm-5 offset-sm-4 loginColumn">
           <form>
             <div className="form-group">
               <label htmlFor="inputUsername">Username</label>
@@ -24,9 +24,9 @@ function Signup({ history }) {
           <div className="col-sm-6 offset-sm-3">
             <button type="submit" className="btn btn-primary btn-sm btn-block" onClick={()=>history.push('/fbconnect')}>Signup</button>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'row', marginLeft: 20, marginTop: 10 }}>
+          <div className="switchModeDiv">
             <p>Already have an account?</p>
-            <p style={{ paddingLeft: 4, color: 'blue', cursor: 'pointer' }} onClick={() => history.push('/login')}>Login</p>
+            <p className="switchModeLink" onClick={() => history.push('/login')}>Login</p>
           </div>
         </div>
       </div>

@@ -7,7 +7,11 @@ function FbConnect({ history }) {
         <div>
             <Header />
             <div className="container">
-                <h2>Facebook connect</h2>
+                <div className="container">
+                <div className="col-sm-3 offset-sm-4" style={{ display: 'flex', flexDirection: 'row', marginBottom: 60, marginTop:60 }}>
+                    <button type="submit" className="btn btn-primary btn-md" style={{ marginLeft: 10 }}>Facebook connect</button>
+                </div>
+            </div>
             </div>
         </div>
     );

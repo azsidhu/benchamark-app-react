@@ -7,3 +7,16 @@
 .navItemText{
     cursor: pointer;
 }
+
+.logoutText{
+    font-weight: bold;
+    color: white;
+}
+
+.topNav{
+    padding-bottom: 0px;
+}
+
+.logoutDiv{
+    float: right;
+}
