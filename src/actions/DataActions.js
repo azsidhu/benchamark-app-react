@@ -1,20 +1,14 @@
-import { API } from '../config/static'
+import { FetchMediaURL } from '../config/urls'
+import { ADD_USER_MEDIA } from './types'
+import { request } from './request'
 
-const axios = require('axios')
-
-export const fetchMedia = token => {
-  let config = { headers: { Authorization: 'Bearer ' + token } }
-  return dispatch => {
-    axios
-      .get(`${API}/instagram_benchmark/media`, config)
-      .then(function (response) {
-        console.log('media fetch response: ', response)
-        dispatch({ type: 'ADD_MEDIA_COUNT', payload: response.data.count })
-        dispatch({ type: 'ADD_MEDIA_NEXT', payload: response.data.next })
-        dispatch({ type: 'ADD_MEDIA_FETCHED', payload: response.data.results })
-      })
-      .catch(function (error) {
-        console.log('media profile error: ', error)
-      })
+export const fetchUserMedia = token => {
+  return async dispatch => {
+    let response = await request('get', FetchMediaURL, token)
+    if (response) dispatch(addUserMedia(response.data))
   }
+}
+
+const addUserMedia = payload => {
+  return { type: ADD_USER_MEDIA, payload: payload }
 }

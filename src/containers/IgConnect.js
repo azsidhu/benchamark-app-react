@@ -2,20 +2,19 @@ import React, { useEffect } from 'react'
 import Header from '../components/Header'
 import '../styles/IgConnect.css'
 import '../styles/Global.css'
-import images from '../assets/images'
+import { images } from '../assets/images'
 import { connect, useSelector } from 'react-redux'
-import { fetchMedia } from '../actions/DataActions'
+import { fetchUserMedia } from '../actions/DataActions'
+import { Link } from 'react-router-dom'
 
-function IgConnect ({ history, fetchMedia }) {
+const IgConnect = ({ history, fetchUserMedia }) => {
   const auth = useSelector(state => state.user.auth)
   useEffect(
     () => {
-      if (auth) {
-        fetchMedia(auth.access)
-      } else history.push('/login')
+      fetchUserMedia(auth.access)
     },
-    [auth] // eslint-disable-line
-  ) 
+    [] // eslint-disable-line
+  )
   return (
     <div>
       <Header />
@@ -102,11 +101,8 @@ function IgConnect ({ history, fetchMedia }) {
                 <th scope='row'>1</th>
                 <td>07:45 19-19</td>
                 <td>@otto</td>
-                <td
-                  className='detailsRow'
-                  onClick={() => history.push('/igPageResults')}
-                >
-                  details
+                <td className='detailsRow'>
+                  <Link to='/igPageResults'>details</Link>
                 </td>
               </tr>
             </tbody>
@@ -148,5 +144,5 @@ function IgConnect ({ history, fetchMedia }) {
 
 export default connect(
   null,
-  { fetchMedia }
+  { fetchUserMedia }
 )(IgConnect)

@@ -1,9 +1,13 @@
 import React from 'react'
 import '../styles/Header.css'
-import { NavLink } from 'react-router-dom'
 import CustomNavLink from './CustomNavLink'
+import { connect } from 'react-redux'
+import { logoutUser } from '../actions/AuthActions'
 
-function Header () {
+const Header = ({ logoutUser }) => {
+  const handleLogoutBtnClick = () => {
+    logoutUser()
+  }
   return (
     <nav className='navbar navbar-expand-lg navbar-dark bg-dark topNav'>
       <p className='navbar-brand'>
@@ -41,12 +45,15 @@ function Header () {
         </ul>
       </div>
       <div className='logoutDiv'>
-        <NavLink to='/login' className='nav-link logoutText'>
+        <h5 className='nav-link logoutText' onClick={handleLogoutBtnClick}>
           Logout
-        </NavLink>
+        </h5>
       </div>
     </nav>
   )
 }
 
-export default Header
+export default connect(
+  null,
+  { logoutUser }
+)(Header)

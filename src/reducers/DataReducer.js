@@ -1,18 +1,23 @@
+import { ADD_USER_MEDIA } from '../actions/types'
+
 const INITIAL_STATE = {
   instaMedia: [],
   mediaCount: 0,
   nextMedia: null
 }
 
-export default (state = INITIAL_STATE, action) => {
+const DataReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'ADD_MEDIA_FETCHED':
-      return { ...state, instaMedia: action.payload }
-    case 'ADD_MEDIA_COUNT':
-      return { ...state, mediaCount: action.payload }
-    case 'ADD_MEDIA_NEXT':
-      return { ...state, nextMedia: action.payload }
+    case ADD_USER_MEDIA:
+      return {
+        ...state,
+        instaMedia: action.payload.results,
+        mediaCount: action.payload.count,
+        nextMedia: action.payload.next
+      }
     default:
-      return state
+      return { ...state }
   }
 }
+
+export { DataReducer }

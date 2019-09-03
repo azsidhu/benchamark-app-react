@@ -2,8 +2,9 @@ import React from 'react'
 import Header from '../components/Header'
 import '../styles/IgConnect.css'
 import '../styles/Global.css'
+import { Link } from 'react-router-dom'
 
-function IgConnected ({ history }) {
+const IgConnected = ({ history }) => {
   return (
     <div>
       <Header />
@@ -50,55 +51,40 @@ function IgConnected ({ history }) {
                 <th scope='row'>1</th>
                 <td>07:45 19-19</td>
                 <td>@otto</td>
-                <td
-                  className='detailsRow'
-                  onClick={() => history.push('/igPageResults')}
-                >
-                  details
+                <td className='detailsRow'>
+                  <Link to='/igPageResults'>details</Link>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>2</th>
                 <td>03:35 19-19</td>
                 <td>@photo_cc</td>
-                <td
-                  className='detailsRow'
-                  onClick={() => history.push('/igPageResults')}
-                >
-                  details
+                <td className='detailsRow'>
+                  <Link to='/igPageResults'>details</Link>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>3</th>
                 <td>07:45 19-19</td>
                 <td>@otto</td>
-                <td
-                  className='detailsRow'
-                  onClick={() => history.push('/igPageResults')}
-                >
-                  details
+                <td className='detailsRow'>
+                  <Link to='/igPageResults'>details</Link>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>4</th>
                 <td>10:30 19-20</td>
                 <td>@dawn.com</td>
-                <td
-                  className='detailsRow'
-                  onClick={() => history.push('/igPageResults')}
-                >
-                  details
+                <td className='detailsRow'>
+                  <Link to='/igPageResults'>details</Link>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>5</th>
                 <td>07:45 19-19</td>
                 <td>@otto</td>
-                <td
-                  className='detailsRow'
-                  onClick={() => history.push('/igPageResults')}
-                >
-                  details
+                <td className='detailsRow'>
+                  <Link to='/igPageResults'>details</Link>
                 </td>
               </tr>
             </tbody>

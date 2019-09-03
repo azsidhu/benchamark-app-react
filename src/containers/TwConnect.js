@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import '../styles/IgConnect.css'
 import '../styles/Global.css'
 
-function TwConnect ({ history }) {
+const TwConnect = ({ history }) => {
   return (
     <div>
       <Header />

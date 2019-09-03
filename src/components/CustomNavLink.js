@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, NavLink, withRouter } from 'react-router-dom'
 import '../styles/Header.css'
-import Colors from '../config/colors'
+import { Colors } from '../config/colors'
 
 const CustomNavLink = ({ to, location, text }) => {
   // console.log('location: ', location)

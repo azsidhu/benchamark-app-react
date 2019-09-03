@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../components/Header'
 
-function FbConnect ({ history }) {
+const FbConnect = ({ history }) => {
   return (
     <div>
       <Header />

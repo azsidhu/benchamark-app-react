@@ -8,8 +8,8 @@
 }
 
 .logoutText {
-  font-weight: bold;
   color: white;
+  cursor: pointer;
 }
 
 .topNav {

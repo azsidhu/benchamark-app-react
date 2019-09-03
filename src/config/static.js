@@ -1,10 +1,12 @@
-const API = 'http://localhost:8000'
-
-let validateEmail = email => {
+const validateEmail = email => {
   var re = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(String(email).toLowerCase())
 }
+
+const print = (string, variable) => {
+  console.log(string, ': ', variable)
+}
 module.exports = {
-  API,
-  validateEmail
+  validateEmail,
+  print
 }

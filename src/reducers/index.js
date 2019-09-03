@@ -1,10 +1,10 @@
-import authReducer from './AuthReducer'
-import dataReducer from './DataReducer'
+import { AuthReducer } from './AuthReducer'
+import { DataReducer } from './DataReducer'
 import { combineReducers } from 'redux'
 
 const rootReducer = combineReducers({
-  user: authReducer,
-  data: dataReducer
+  user: AuthReducer,
+  data: DataReducer
 })
 
-export default rootReducer
+export { rootReducer }

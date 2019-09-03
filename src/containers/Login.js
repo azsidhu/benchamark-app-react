@@ -1,29 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../styles/Login.css'
 import { loginUser, clearError } from '../actions/AuthActions'
 import { connect, useSelector } from 'react-redux'
+import { ToastsStore } from 'react-toasts'
 
-function Login ({ history, loginUser, clearError }) {
+const Login = ({ history, loginUser, clearError }) => {
   // local state
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   // redux state
   const errorMessage = useSelector(state => state.user.errorMessage)
+  const auth = useSelector(state => state.user.auth)
+  useEffect(
+    () => {
+      if (auth) {
+        history.push('/igconnect')
+      }
+    },
+    [auth] // eslint-disable-line
+  )
   if (errorMessage.length !== 0) {
-    alert(errorMessage)
-    // setUsername('')
+    ToastsStore.error(errorMessage)
     setPassword('')
     clearError()
   }
   // local helper methods
-  const loginHandler = () => {
+  const handleLoginBtnClick = () => {
     if (username.trim().length === 0) {
-      alert('username can not be empty')
+      ToastsStore.error('username can not be empty')
     } else if (password.trim().length === 0) {
-      alert('password can not be empty')
+      ToastsStore.error('password can not be empty')
     } else loginUser({ username: username, password: password })
   }
-  const handleChange = event => {
+  const handleTextInputChange = event => {
     if (event.target.id === 'inputUsername') {
       setUsername(event.target.value)
     } else if (event.target.id === 'inputPassword') {
@@ -45,7 +54,7 @@ function Login ({ history, loginUser, clearError }) {
                 className='form-control'
                 id='inputUsername'
                 placeholder='Enter Username'
-                onChange={event => handleChange(event)}
+                onChange={handleTextInputChange}
               />
             </div>
             <div className='form-group'>
@@ -58,7 +67,7 @@ function Login ({ history, loginUser, clearError }) {
                 className='form-control'
                 id='inputPassword'
                 placeholder='Password'
-                onChange={event => handleChange(event)}
+                onChange={handleTextInputChange}
               />
             </div>
           </form>
@@ -66,7 +75,7 @@ function Login ({ history, loginUser, clearError }) {
             <button
               type='submit'
               className='btn btn-primary btn-sm btn-block'
-              onClick={() => loginHandler()}
+              onClick={() => handleLoginBtnClick()}
             >
               Login
             </button>
