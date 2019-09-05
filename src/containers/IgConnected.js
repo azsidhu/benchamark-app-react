@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from '../components/Header'
 import '../styles/IgConnect.css'
 import '../styles/Global.css'
 import { Link } from 'react-router-dom'
 
 const IgConnected = ({ history }) => {
+  useEffect(
+    () => {
+      let accessToken = window.location.href.split('#')[1].split('=')[1]
+      console.log('accessToken: ', accessToken)
+    },
+    [] // eslint-disable-line
+  )
   return (
     <div>
       <Header />

@@ -11,6 +11,7 @@ import {
   IgPageResults
 } from './containers'
 import { connect, useSelector } from 'react-redux'
+import {InstaRedirect} from './config/urls'
 
 const Routes = () => {
   const auth = useSelector(state => state.user.auth)
@@ -33,6 +34,13 @@ const Routes = () => {
         <PrivateRoute exact path='/igPageResults' component={IgPageResults} />
         <Route path='/login' component={LoginScreen} />
         <Route path='/signup' component={SignupScreen} />
+        <Route
+          path='/instaRedirect'
+          component={() => {
+            window.location.href = InstaRedirect
+            return null
+          }}
+        />
       </Switch>
     </Router>
   )

@@ -61,7 +61,7 @@ const IgConnect = ({ history, fetchUserMedia }) => {
           <button
             type='submit'
             className='btn btn-primary btn-md'
-            onClick={() => history.push('/igconnected')}
+            onClick={() => history.push('/instaRedirect')}
             style={{ marginLeft: 10 }}
           >
             Connect to Instagram
