@@ -1,10 +1,10 @@
 
 import React from 'react';
 import '../styles/Header.css';
-import { NavLink } from 'react-router-dom'
-import Colors from '../config/colors'
+import { NavLink } from 'react-router-dom';
+import CustomNavLink from './CustomNavLink';
 
-function Header({ history }) {
+function Header() {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark topNav">
             <p className="navbar-brand">
@@ -16,13 +16,13 @@ function Header({ history }) {
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
                     <li className="nav-item navItem">
-                        <NavLink to="/fbconnect" className="nav-link navItemText" activeStyle={activeStyles}>Facebook</NavLink>
+                        <CustomNavLink to="/fbconnect" text="Facebook"></CustomNavLink>
                     </li>
                     <li className="nav-item navItem">
-                        <NavLink to="/igconnect" className="nav-link navItemText" activeStyle={activeStyles}>Instagram</NavLink>
+                        <CustomNavLink to="/igconnect" text="Instagram"></CustomNavLink>
                     </li>
                     <li className="nav-item navItem">
-                        <NavLink to="/twconnect" className="nav-link navItemText" activeStyle={activeStyles}>Twitter</NavLink>
+                        <CustomNavLink to="/twconnect" text="Twitter"></CustomNavLink>
                     </li>
                 </ul>
             </div>
@@ -31,11 +31,6 @@ function Header({ history }) {
             </div>
         </nav>
     );
-}
-
-const activeStyles={
-    fontWeight: "bold",
-    color: Colors.activeLinkColor
 }
 
 

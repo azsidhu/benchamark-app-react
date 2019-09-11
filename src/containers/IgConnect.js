@@ -46,30 +46,6 @@ function IgConnect({ history }) {
                                 <td>@otto</td>
                                 <td className="detailsRow" onClick={() => history.push('/igPageResults')}>details</td>
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>03:35 19-19</td>
-                                <td>@photo_cc</td>
-                                <td className="detailsRow" onClick={() => history.push('/igPageResults')}>details</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>07:45 19-19</td>
-                                <td>@otto</td>
-                                <td className="detailsRow" onClick={() => history.push('/igPageResults')}>details</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>10:30 19-20</td>
-                                <td>@dawn.com</td>
-                                <td className="detailsRow" onClick={() => history.push('/igPageResults')}>details</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">5</th>
-                                <td>07:45 19-19</td>
-                                <td>@otto</td>
-                                <td className="detailsRow" onClick={() => history.push('/igPageResults')}>details</td>
-                            </tr>
                         </tbody>
                     </table>
                     <div className="pagginationDiv">
