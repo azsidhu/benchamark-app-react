@@ -11,7 +11,7 @@ import {
   IgPageResults
 } from './containers'
 import { connect, useSelector } from 'react-redux'
-import {InstaRedirect} from './config/urls'
+import { InstaRedirect } from './config/urls'
 
 const Routes = () => {
   const auth = useSelector(state => state.user.auth)
@@ -27,11 +27,11 @@ const Routes = () => {
     <Router history={history}>
       <Switch>
         <Route exact path='/' component={LoginScreen} />
-        <PrivateRoute exact path='/fbconnect' component={FbConnect} />
-        <PrivateRoute exact path='/igconnect' component={IgConnect} />
-        <PrivateRoute exact path='/twconnect' component={TwConnect} />
-        <PrivateRoute exact path='/igconnected' component={IgConnected} />
-        <PrivateRoute exact path='/igPageResults' component={IgPageResults} />
+        <PrivateRoute path='/fbconnect' component={FbConnect} />
+        <PrivateRoute path='/igconnect' component={IgConnect} />
+        <PrivateRoute path='/twconnect' component={TwConnect} />
+        <PrivateRoute path='/igconnected' component={IgConnected} />
+        <PrivateRoute path='/igPageResults' component={IgPageResults} />
         <Route path='/login' component={LoginScreen} />
         <Route path='/signup' component={SignupScreen} />
         <Route

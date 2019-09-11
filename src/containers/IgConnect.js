@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import '../styles/IgConnect.css'
 import '../styles/Global.css'
@@ -6,15 +6,65 @@ import { images } from '../assets/images'
 import { connect, useSelector } from 'react-redux'
 import { fetchUserMedia } from '../actions/DataActions'
 import { Link } from 'react-router-dom'
+import { pageSize } from '../config/static'
+import Pagination from 'react-js-pagination'
+var moment = require('moment')
 
 const IgConnect = ({ history, fetchUserMedia }) => {
+  // local state variables
+  const [currentPage, setCurrentPage] = useState(1)
+  // redux store data
   const auth = useSelector(state => state.user.auth)
+  const data = useSelector(state => state.data)
+  // local scope variables
+  const instaMedia = data.instaMedia
+  const instaMediaIds = data.instaMediaIds
+  // const pagesAvailable = data.mediaCount / pageSize
   useEffect(
     () => {
-      fetchUserMedia(auth.access)
+      fetchUserMedia(auth.access, currentPage)
     },
-    [] // eslint-disable-line
+    [currentPage] // eslint-disable-line
   )
+  // helper methods for component
+  const handlePageChange = pageNumber => {
+    setCurrentPage(Number(pageNumber))
+  }
+  const renderMediaRows = () => {
+    return instaMediaIds.map((id, index) => {
+      const { created_at } = instaMedia[id]
+      const { media_type, likes_count, comments_count } = instaMedia[
+        id
+      ].media_insights[0]
+      return (
+        <tr key={index}>
+          <td>{id}</td>
+          <td>{media_type}</td>
+          <td>{moment(created_at).format('lll')}</td>
+          <td>{likes_count}</td>
+          <td>{comments_count}</td>
+          <td className='detailsRow'>
+            <Link to='/igPageResults'>details</Link>
+          </td>
+        </tr>
+      )
+    })
+  }
+  // const renderPageNumbers = () => {
+  //   let pageNumbers = []
+  //   for (let i = 1; i < pagesAvailable + 1; i++) {
+  //     if (i < 5) {
+  //       pageNumbers.push(
+  //         <li key={i} className='page-item'>
+  //           <p id={i} onClick={handlePageClick} className='page-link'>
+  //             {i}
+  //           </p>
+  //         </li>
+  //       )
+  //     }
+  //   }
+  //   return pageNumbers
+  // }
   return (
     <div>
       <Header />
@@ -90,51 +140,26 @@ const IgConnect = ({ history, fetchUserMedia }) => {
           <table className='table'>
             <thead className='thead-dark'>
               <tr>
-                <th scope='col'>#</th>
+                <th scope='col'>Id</th>
+                <th scope='col'>Media Type</th>
                 <th scope='col'>Last Crawl</th>
-                <th scope='col'>Username</th>
+                <th scope='col'>Likes count</th>
+                <th scope='col'>Comments count</th>
                 <th scope='col'>Visit</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <th scope='row'>1</th>
-                <td>07:45 19-19</td>
-                <td>@otto</td>
-                <td className='detailsRow'>
-                  <Link to='/igPageResults'>details</Link>
-                </td>
-              </tr>
-            </tbody>
+            <tbody>{renderMediaRows()}</tbody>
           </table>
           <div className='pagginationDiv'>
-            <ul className='pagination'>
-              <li className='page-item'>
-                <p className='page-link' aria-label='Previous'>
-                  <span aria-hidden='true'>&laquo;</span>
-                </p>
-              </li>
-              <li className='page-item'>
-                <p className='page-link'>1</p>
-              </li>
-              <li className='page-item'>
-                <p className='page-link'>2</p>
-              </li>
-              <li className='page-item'>
-                <p className='page-link'>3</p>
-              </li>
-              <li className='page-item'>
-                <p className='page-link'>4</p>
-              </li>
-              <li className='page-item'>
-                <p className='page-link'>5</p>
-              </li>
-              <li className='page-item'>
-                <p className='page-link' aria-label='Next'>
-                  <span aria-hidden='true'>&raquo;</span>
-                </p>
-              </li>
-            </ul>
+            <Pagination
+              activePage={currentPage}
+              itemsCountPerPage={pageSize}
+              totalItemsCount={data.mediaCount}
+              pageRangeDisplayed={5}
+              onChange={handlePageChange}
+              itemClass='page-item'
+              linkClass='page-link'
+            />
           </div>
         </div>
       </div>

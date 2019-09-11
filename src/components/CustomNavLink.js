@@ -4,11 +4,10 @@ import '../styles/Header.css'
 import { Colors } from '../config/colors'
 
 const CustomNavLink = ({ to, location, text }) => {
-  // console.log('location: ', location)
   return (
     <Route
       path={to}
-      children={({ match }) => (
+      children={() => (
         <NavLink
           replace={to === location.pathname}
           to={to}

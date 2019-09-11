@@ -6,7 +6,11 @@ const validateEmail = email => {
 const print = (string, variable) => {
   console.log(string, ': ', variable)
 }
+
+const pageSize = 10
+
 module.exports = {
   validateEmail,
-  print
+  print,
+  pageSize
 }
