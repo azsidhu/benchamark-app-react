@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import configureStore from './configureStore';
 import LoginScreen from './containers/Login';
 import SignupScreen from './containers/Signup';
-import FbConnect from './containers/FbConnect';
+import FacebookConnect from './facebook_benchmark/FacebookConnect/FacebookConnect';
 import IgConnect from './containers/IgConnect';
 import TwConnect from './containers/TwConnect';
 import IgConnected from './containers/IgConnected';
@@ -19,7 +19,7 @@ function App() {
       <Router history={history}>
         <Switch>
           <Route exact path='/' component={LoginScreen} />
-          <Route exact path='/fbconnect' component={FbConnect} />
+          <Route exact path='/fbconnect' component={FacebookConnect} />
           <Route exact path='/igconnect' component={IgConnect} />
           <Route exact path='/twconnect' component={TwConnect} />
           <Route exact path='/igconnected' component={IgConnected} />
