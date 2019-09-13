@@ -35,6 +35,7 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
     case UPDATE_PROFILE_DATA:
       return { ...state, profile: action.payload }
     case UPDATE_AUTH_DATA:
+      localStorage.removeItem('auth')
       localStorage.setItem('auth', JSON.stringify(action.payload))
       return { ...state, auth: action.payload }
     case NEW_USER_CREATED:

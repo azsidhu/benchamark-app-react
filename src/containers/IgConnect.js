@@ -4,22 +4,25 @@ import '../styles/IgConnect.css'
 import '../styles/Global.css'
 import { images } from '../assets/images'
 import { connect, useSelector } from 'react-redux'
-import { fetchUserMedia } from '../actions/DataActions'
+import { fetchUserMedia, CrawlNewUser } from '../actions/DataActions'
 import { Link } from 'react-router-dom'
 import { pageSize } from '../config/static'
 import Pagination from 'react-js-pagination'
-var moment = require('moment')
+import { ToastsStore } from 'react-toasts'
+// var moment = require('moment')
+var moment = require('moment-timezone')
 
-const IgConnect = ({ history, fetchUserMedia }) => {
+const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
+  const [username, setUsername] = useState('')
   // redux store data
   const auth = useSelector(state => state.user.auth)
   const data = useSelector(state => state.data)
   // local scope variables
   const instaMedia = data.instaMedia
   const instaMediaIds = data.instaMediaIds
-  // const pagesAvailable = data.mediaCount / pageSize
+
   useEffect(
     () => {
       fetchUserMedia(auth.access, currentPage)
@@ -32,39 +35,53 @@ const IgConnect = ({ history, fetchUserMedia }) => {
   }
   const renderMediaRows = () => {
     return instaMediaIds.map((id, index) => {
-      const { created_at } = instaMedia[id]
+      const { created_at, insta_user_id } = instaMedia[id]
       const { media_type, likes_count, comments_count } = instaMedia[
         id
       ].media_insights[0]
+      let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+      console.log('timezone: ',timezone)
       return (
         <tr key={index}>
           <td>{id}</td>
+          <td>{insta_user_id}</td>
           <td>{media_type}</td>
-          <td>{moment(created_at).format('lll')}</td>
+          <td>
+            {moment(created_at)
+              .tz(timezone)
+              .format('lll')}
+          </td>
           <td>{likes_count}</td>
           <td>{comments_count}</td>
           <td className='detailsRow'>
-            <Link to='/igPageResults'>details</Link>
+            <Link
+              to={{
+                pathname: '/igPageResults',
+                data: {
+                  media: instaMedia[id]
+                }
+              }}
+            >
+              details
+            </Link>
           </td>
         </tr>
       )
     })
   }
-  // const renderPageNumbers = () => {
-  //   let pageNumbers = []
-  //   for (let i = 1; i < pagesAvailable + 1; i++) {
-  //     if (i < 5) {
-  //       pageNumbers.push(
-  //         <li key={i} className='page-item'>
-  //           <p id={i} onClick={handlePageClick} className='page-link'>
-  //             {i}
-  //           </p>
-  //         </li>
-  //       )
-  //     }
-  //   }
-  //   return pageNumbers
-  // }
+  const handleCrawlClick = () => {
+    if (username.trim().length === 0) {
+      ToastsStore.error('can not crawl an empty username')
+    } else {
+      CrawlNewUser(auth.access, username)
+      history.push('/igconnected')
+    }
+  }
+  const handleTextInputChange = event => {
+    if (event.target.id === 'inputIgUser') {
+      setUsername(event.target.value)
+    }
+  }
   return (
     <div>
       <Header />
@@ -74,7 +91,7 @@ const IgConnect = ({ history, fetchUserMedia }) => {
           style={{
             display: 'flex',
             flexDirection: 'row',
-            marginTop: 40,
+            marginTop: 20,
             marginBottom: 10
           }}
         >
@@ -83,11 +100,12 @@ const IgConnect = ({ history, fetchUserMedia }) => {
             className='form-control'
             id='inputIgUser'
             placeholder='Enter Insta username'
+            onChange={handleTextInputChange}
           />
           <button
             type='submit'
             className='btn btn-primary btn-md'
-            onClick={() => history.push('/igPageResults')}
+            onClick={handleCrawlClick}
             style={{ marginLeft: 10 }}
           >
             Crawl
@@ -106,7 +124,7 @@ const IgConnect = ({ history, fetchUserMedia }) => {
         </div>
         <div
           className='col-sm-3 offset-sm-4'
-          style={{ display: 'flex', flexDirection: 'row', marginBottom: 60 }}
+          style={{ display: 'flex', flexDirection: 'row', marginBottom: 30 }}
         >
           <button
             type='submit'
@@ -141,6 +159,7 @@ const IgConnect = ({ history, fetchUserMedia }) => {
             <thead className='thead-dark'>
               <tr>
                 <th scope='col'>Id</th>
+                <th scope='col'>Insta uid</th>
                 <th scope='col'>Media Type</th>
                 <th scope='col'>Last Crawl</th>
                 <th scope='col'>Likes count</th>
@@ -169,5 +188,5 @@ const IgConnect = ({ history, fetchUserMedia }) => {
 
 export default connect(
   null,
-  { fetchUserMedia }
+  { fetchUserMedia, CrawlNewUser }
 )(IgConnect)
