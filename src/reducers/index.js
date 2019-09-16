@@ -1,10 +1,12 @@
-import { AuthReducer } from './AuthReducer'
-import { DataReducer } from './DataReducer'
-import { combineReducers } from 'redux'
+import { AuthReducer } from "./AuthReducer";
+import { DataReducer } from "./DataReducer";
+import FacebookConnectReducer from "../facebook_benchmark/FacebookConnect/FacebookConnectReducer";
+import { combineReducers } from "redux";
 
 const rootReducer = combineReducers({
   user: AuthReducer,
-  data: DataReducer
-})
+  data: DataReducer,
+  FacebookConnectReducer
+});
 
-export { rootReducer }
+export { rootReducer };
