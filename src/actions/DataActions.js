@@ -8,9 +8,9 @@ import { request } from './request'
 import { clientURL } from '../config/urls'
 import { ToastsStore } from 'react-toasts'
 
-export const fetchUserMedia = (token, page) => {
+export const fetchUserMedia = (token, page,search='') => {
   return async dispatch => {
-    let response = await request('get', `${FetchMediaURL}${page}`, token)
+    let response = await request('get', `${FetchMediaURL}${page}&search=${search}`, token)
     if (response) dispatch(addUserMedia(response.data))
   }
 }
@@ -23,7 +23,6 @@ export const FetchNewData = (token, accessTokenIG) => {
   console.log('accessTokenIG: ',accessTokenIG)
   return async dispatch => {
     dispatch(startDataLoadingSpinner())
-    console.log('token: ',token)
     let response = await request('post', FetchNewDataURL, token, {
       access_token: accessTokenIG
     })

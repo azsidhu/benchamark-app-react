@@ -9,13 +9,17 @@ import { Link } from 'react-router-dom'
 import { pageSize } from '../config/static'
 import Pagination from 'react-js-pagination'
 import { ToastsStore } from 'react-toasts'
-// var moment = require('moment')
-var moment = require('moment-timezone')
+import * as moment from 'moment-timezone'
+import { saveAs } from 'file-saver'
+import * as JSZip from 'jszip'
+import * as JSZipUtils from 'jszip-utils'
 
 const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
   const [username, setUsername] = useState('')
+  const [searchText, setSearchText] = useState('')
+  const [imageUrls, setImageUrls] = useState([])
   // redux store data
   const auth = useSelector(state => state.user.auth)
   const data = useSelector(state => state.data)
@@ -25,22 +29,52 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
 
   useEffect(
     () => {
-      fetchUserMedia(auth.access, currentPage)
+      console.log('searchText:',searchText.length>1?searchText:'')
+      fetchUserMedia(auth.access, currentPage, searchText.length>1?searchText:'')
     },
-    [currentPage] // eslint-disable-line
+    [currentPage,searchText] // eslint-disable-line
   )
   // helper methods for component
+  const populateUrls = () => {
+    return instaMediaIds.map((id, index) => {
+      const { media_url } = instaMedia[id]
+      if (imageUrls.length < pageSize) {
+        setImageUrls([...imageUrls, imageUrls.push(media_url)])
+      }
+      return index
+    })
+  }
+  populateUrls()
+  const imagesDownloader = urls => {
+    var zip = new JSZip()
+    var count = 0
+    var zipFilename = 'crawlImagesIG.zip'
+    urls.forEach(function (url) {
+      // loading a file and add it in a zip file
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err // or handle the error
+        }
+        zip.file(`image${count + 1}`, data, { binary: true })
+        count++
+        if (count === urls.length) {
+          zip.generateAsync({ type: 'blob' }).then(function (content) {
+            saveAs(content, zipFilename)
+          })
+        }
+      })
+    })
+  }
   const handlePageChange = pageNumber => {
     setCurrentPage(Number(pageNumber))
   }
   const renderMediaRows = () => {
     return instaMediaIds.map((id, index) => {
       const { created_at, insta_user_id } = instaMedia[id]
-      const { media_type, likes_count, comments_count } = instaMedia[
+      const { media_type, likes_count, comments_count, filter_used } = instaMedia[
         id
       ].media_insights[0]
       let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-      console.log('timezone: ',timezone)
       return (
         <tr key={index}>
           <td>{id}</td>
@@ -51,6 +85,7 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
               .tz(timezone)
               .format('lll')}
           </td>
+          <td>{filter_used}</td>
           <td>{likes_count}</td>
           <td>{comments_count}</td>
           <td className='detailsRow'>
@@ -80,6 +115,8 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
   const handleTextInputChange = event => {
     if (event.target.id === 'inputIgUser') {
       setUsername(event.target.value)
+    } else if (event.target.id === 'inputSearchText') {
+      setSearchText(event.target.value)
     }
   }
   return (
@@ -152,6 +189,7 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
                 type='text'
                 className='form-control'
                 id='inputSearchText'
+                onChange={handleTextInputChange}
               />
             </div>
           </div>
@@ -160,10 +198,11 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
               <tr>
                 <th scope='col'>Id</th>
                 <th scope='col'>Insta uid</th>
-                <th scope='col'>Media Type</th>
-                <th scope='col'>Last Crawl</th>
-                <th scope='col'>Likes count</th>
-                <th scope='col'>Comments count</th>
+                <th scope='col'>Media type</th>
+                <th scope='col'>Crawl time</th>
+                <th scope='col'>Filter used</th>
+                <th scope='col'>Likes</th>
+                <th scope='col'>Comments</th>
                 <th scope='col'>Visit</th>
               </tr>
             </thead>
@@ -179,6 +218,20 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
               itemClass='page-item'
               linkClass='page-link'
             />
+          </div>
+          <div className='col-sm-5'>
+            <button
+              type='submit'
+              className='btn btn-primary btn-md'
+              onClick={
+                imageUrls.length !== 0
+                  ? () => imagesDownloader(imageUrls)
+                  : ToastsStore.error('No images to download!!')
+              }
+              style={{ marginTop: 3 }}
+            >
+              Download this page images
+            </button>
           </div>
         </div>
       </div>

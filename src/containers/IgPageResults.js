@@ -9,7 +9,7 @@ const pageResults = ({ history, location }) => {
   if (location.data) {
     media = location.data.media
     url = media.media_url
-    console.log('media: ', media)
+    //console.log('media: ', media)
   }
   return (
     <div>
