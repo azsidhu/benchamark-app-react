@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ToastsStore } from "react-toasts";
 import C from "../../utils/constants";
 
 const setIsConnected = value => {
@@ -17,9 +18,10 @@ const fetchFacebookProfile = (userAccessToken, jwt) => {
       const res = await axios.get(
         `${C.APIS.FETCH_FACEBOOK_PROFILE}${userAccessToken}`, headers
       );
-      console.log(res);
+      dispatch(setIsConnected(true));
+      ToastsStore.success(`Connected with Facebook as ${res.data.first_name} ${res.data.last_name}.`);
     } catch (error) {
-      console.log(error);
+      ToastsStore.error("Unable to connected with Facebook.");
     }
   };
 };

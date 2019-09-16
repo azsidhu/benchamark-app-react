@@ -2,14 +2,21 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import "@fortawesome/fontawesome-free/css/all.css";
+import { ToastsStore } from "react-toasts";
 import C from "../../utils/constants";
 import { setIsConnected, fetchFacebookProfile } from "./FacebookConnectActions";
 import Header from "../../components/Header";
 
-const FacebookConnect = ({ isConnected, jwt, setIsConnected, fetchFacebookProfile }) => {
+const FacebookConnect = ({
+  isConnected,
+  jwt,
+  setIsConnected,
+  fetchFacebookProfile
+}) => {
   const checkPermissions = userAccessToken => {
     FB.api("/me/permissions", response => {
       let reRequest = false;
+      // eslint-disable-next-line no-unused-vars
       for (const permission of response.data) {
         if (permission.status === C.FACEBOOK_PERMISSION_STATUS_DECLINED) {
           reRequest = true;
@@ -17,10 +24,9 @@ const FacebookConnect = ({ isConnected, jwt, setIsConnected, fetchFacebookProfil
         }
       }
       if (reRequest) {
-        console.log("Please provide required permissions.");
+        ToastsStore.error("Please provide required permissions.");
       } else {
-        fetchFacebookProfile(userAccessToken, jwt)
-        setIsConnected(true);
+        fetchFacebookProfile(userAccessToken, jwt);
       }
     });
   };
@@ -30,9 +36,10 @@ const FacebookConnect = ({ isConnected, jwt, setIsConnected, fetchFacebookProfil
       if (response.status === C.FACEBOOK_CONNECTED) {
         checkPermissions(response.authResponse.accessToken);
       } else {
-        console.log("Please connect with facebook.");
+        ToastsStore.info("Please connect with facebook.");
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClick = () => {
@@ -41,17 +48,16 @@ const FacebookConnect = ({ isConnected, jwt, setIsConnected, fetchFacebookProfil
         if (response.status === C.FACEBOOK_LOGGED_OUT) {
           setIsConnected(false);
         } else {
-          console.log("Unable to disconnect with facebook.");
+          ToastsStore.error("Unable to disconnect with facebook.");
         }
       });
     } else {
       FB.login(
         response => {
-          console.log(response)
           if (response.status === C.FACEBOOK_CONNECTED) {
             checkPermissions(response.authResponse.accessToken);
           } else {
-            console.log("Unable to connect with facebook.");
+            ToastsStore.error("Unable to connect with facebook.");
           }
         },
         { scope: C.FACEBOOK_SCOPE.join(",") }
@@ -87,12 +93,12 @@ const FacebookConnect = ({ isConnected, jwt, setIsConnected, fetchFacebookProfil
 const mapStateToProps = state => {
   return {
     isConnected: state.FacebookConnectReducer.isConnected,
-    jwt: state.user.auth.access,
+    jwt: state.user.auth.access
   };
 };
 
 const mapDispatchToProps = {
-  setIsConnected, 
+  setIsConnected,
   fetchFacebookProfile
 };
 
