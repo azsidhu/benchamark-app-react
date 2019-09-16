@@ -1,7 +1,6 @@
-
-let Colors ={
-    appColor:'#fff',
-    activeLinkColor:'aquamarine'
+const Colors = {
+  appColor: '#fff',
+  activeLinkColor: 'aquamarine'
 }
 
-export default Colors;
+export { Colors }
