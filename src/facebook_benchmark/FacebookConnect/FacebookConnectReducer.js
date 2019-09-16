@@ -7,6 +7,10 @@ const initialState = {
 
 const FacebookConnectReducer = (state = initialState, action) => {
   switch (action.type) {
+    case C.CHECK_IS_CONNECTED:
+      return {
+        ...state
+      };
     case C.SET_IS_CONNECTED:
       return {
         ...state,
