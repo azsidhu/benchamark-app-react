@@ -4,7 +4,6 @@ import history from './config/hisroty'
 import {
   LoginScreen,
   SignupScreen,
-  FbConnect,
   IgConnect,
   TwConnect,
   IgConnected,
@@ -12,6 +11,7 @@ import {
 } from './containers'
 import { connect, useSelector } from 'react-redux'
 import { InstaRedirect } from './config/urls'
+import FacebookConnect from './facebook_benchmark/FacebookConnect/FacebookConnect';
 
 const Routes = () => {
   const auth = useSelector(state => state.user.auth)
@@ -27,7 +27,7 @@ const Routes = () => {
     <Router history={history}>
       <Switch>
         <Route exact path='/' component={LoginScreen} />
-        <PrivateRoute path='/fbconnect' component={FbConnect} />
+        <PrivateRoute path='/fbconnect' component={FacebookConnect} />
         <PrivateRoute path='/igconnect' component={IgConnect} />
         <PrivateRoute path='/twconnect' component={TwConnect} />
         <PrivateRoute path='/igconnected' component={IgConnected} />
