@@ -31,7 +31,7 @@ const FacebookPages = ({
             Search:{" "}
           </label>
           <div className="col-sm-10">
-            <input class="form-control" id="search" type="text" />
+            <input className="form-control" id="search" type="text" />
           </div>
         </div>
       </div>
