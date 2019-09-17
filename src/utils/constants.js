@@ -14,7 +14,7 @@ const constants = {
   STATUS_CODES: {
     NOT_FOUND: 404
   },
-  PAGE_SIZE: 1,
+  PAGE_SIZE: 10,
   PAGE_RANGE_DISPLAYED: 5,
   APIS: {
     ROOT: "http://localhost:8000/",
