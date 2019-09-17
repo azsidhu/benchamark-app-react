@@ -53,4 +53,33 @@ const fetchFacebookProfile = (userAccessToken, jwt) => {
   };
 };
 
-export { setIsConnected, checkIsConnected, fetchFacebookProfile };
+const loadFacebookPages = jwt => {
+  return async dispatch => {
+    try {
+      const headers = {
+        headers: { Authorization: `Bearer ${jwt}` }
+      };
+      const { messageType, message } = (await axios.get(
+        `${C.APIS.LOAD_FACEBOOK_PAGES}`,
+        headers
+      )).data;
+      if (messageType === C.MESSAGE_TYPES.INFO) {
+        ToastsStore.info(message);
+      } else if (messageType === C.MESSAGE_TYPES.SUCCESS) {
+        dispatch(setIsConnected(true));
+        ToastsStore.success(message);
+      } else {
+        throw new Error(message);
+      }
+    } catch (error) {
+      ToastsStore.error("Unable to load Facebook pages.");
+    }
+  };
+};
+
+export {
+  setIsConnected,
+  checkIsConnected,
+  fetchFacebookProfile,
+  loadFacebookPages
+};

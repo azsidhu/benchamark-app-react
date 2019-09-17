@@ -7,9 +7,10 @@ import C from "../../utils/constants";
 import {
   setIsConnected,
   checkIsConnected,
-  fetchFacebookProfile
+  fetchFacebookProfile,
+  loadFacebookPages
 } from "./FacebookConnectActions";
-import FacebookPages from '../FacebookPages/FacebookPages'
+import FacebookPages from "../FacebookPages/FacebookPages";
 import Header from "../../components/Header";
 
 const FacebookConnect = ({
@@ -17,7 +18,8 @@ const FacebookConnect = ({
   jwt,
   setIsConnected,
   checkIsConnected,
-  fetchFacebookProfile
+  fetchFacebookProfile,
+  loadFacebookPages
 }) => {
   const checkPermissions = response => {
     let reRequest = false;
@@ -49,11 +51,24 @@ const FacebookConnect = ({
     }
   };
 
+  const handleLoadFacebookPagesClick = () => {
+    loadFacebookPages(jwt);
+  };
+
   let button = isConnected ? (
-    <button className="btn btn-primary">
-      <span className="fab fa-facebook-square fa-lg"></span> Connected with
-      Facebook
-    </button>
+    <React.Fragment>
+      <button className="btn btn-primary mb-3">
+        <span className="fab fa-facebook-square fa-lg"></span> Connected with
+        Facebook
+      </button>
+      <br />
+      <button
+        className="btn btn-primary"
+        onClick={handleLoadFacebookPagesClick}
+      >
+        Load Pages
+      </button>
+    </React.Fragment>
   ) : (
     <FacebookLogin
       appId={C.APP_ID}
@@ -87,7 +102,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   setIsConnected,
   checkIsConnected,
-  fetchFacebookProfile
+  fetchFacebookProfile,
+  loadFacebookPages
 };
 
 export default connect(

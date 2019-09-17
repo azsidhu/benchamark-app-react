@@ -27,6 +27,12 @@ const constants = {
     get FETCH_FACEBOOK_PROFILE() {
       return `${this.FACEBOOK_BENCHMARK}fetch_facebook_profile/`;
     },
+    get LOAD_FACEBOOK_PAGES() {
+      return `${this.FACEBOOK_BENCHMARK}load_facebook_pages/`;
+    },
+    get LOAD_FACEBOOK_PAGE_DATA() {
+      return `${this.FACEBOOK_BENCHMARK}load_facebook_page_data/`;
+    },
     get FETCH_FACEBOOK_PAGES() {
       return `${this.FACEBOOK_BENCHMARK}pages/`;
     }

@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 import Pagination from "react-js-pagination";
 import "@fortawesome/fontawesome-free/css/all.css";
 import C from "../../utils/constants";
-import { setFacebookPages, fetchFacebookPages } from "./FacebookPagesActions";
+import { setFacebookPages, fetchFacebookPages, loadFacebookPageData } from "./FacebookPagesActions";
 
 const FacebookPages = ({
   jwt,
   facebookPages,
   count,
   setFacebookPages,
-  fetchFacebookPages
+  fetchFacebookPages, loadFacebookPageData
 }) => {
   const [currentPage, setCurrentPage] = useState(null);
   const [search, setSearch] = useState("");
@@ -26,6 +26,10 @@ const FacebookPages = ({
 
   const handlePageChange = currentPage => {
     setCurrentPage(currentPage);
+  };
+
+  const handleLoadFacebookPageDataClick = id => {
+    loadFacebookPageData(jwt, id)
   };
 
   return (
@@ -60,7 +64,12 @@ const FacebookPages = ({
             <tr key={page.id}>
               <td>{page.name}</td>
               <td>
-                <button className="btn btn-success">
+                <button
+                  className="btn btn-success"
+                  onClick={() => {
+                    handleLoadFacebookPageDataClick(page.id);
+                  }}
+                >
                   <span className="fas fa-snowflake"></span> Load
                 </button>{" "}
                 <button className="btn btn-info">
@@ -96,7 +105,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   setFacebookPages,
-  fetchFacebookPages
+  fetchFacebookPages, loadFacebookPageData
 };
 
 export default connect(

@@ -29,7 +29,7 @@ const fetchFacebookPages = (jwt, search, page, setPage) => {
       dispatch(setFacebookPages(data.results, data.count));
     } catch (error) {
       if (error.response.status === C.STATUS_CODES.NOT_FOUND) {
-        setPage(null)
+        setPage(null);
         dispatch(fetchFacebookPages(jwt, null, null, setPage));
       } else {
         ToastsStore.error("Unable to fetch Facebook pages.");
@@ -38,4 +38,29 @@ const fetchFacebookPages = (jwt, search, page, setPage) => {
   };
 };
 
-export { setFacebookPages, fetchFacebookPages };
+const loadFacebookPageData = (jwt, id) => {
+  return async dispatch => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${jwt}`
+        }
+      };
+      const { messageType, message } = (await axios.get(
+        `${C.APIS.LOAD_FACEBOOK_PAGE_DATA}${id}`,
+        config
+      )).data;
+      if (messageType === C.MESSAGE_TYPES.INFO) {
+        ToastsStore.info(message);
+      } else if (messageType === C.MESSAGE_TYPES.SUCCESS) {
+        ToastsStore.success(message);
+      } else {
+        throw new Error(message);
+      }
+    } catch (error) {
+      ToastsStore.error("Unable to load Facebook page.");
+    }
+  };
+};
+
+export { setFacebookPages, fetchFacebookPages, loadFacebookPageData };
