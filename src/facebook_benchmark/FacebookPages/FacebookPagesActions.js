@@ -12,22 +12,28 @@ const setFacebookPages = (facebookPages, count) => {
   };
 };
 
-const fetchFacebookPages = (jwt, currentPage) => {
+const fetchFacebookPages = (jwt, search, page, setPage) => {
   return async dispatch => {
     try {
-      const headers = {
-        headers: { Authorization: `Bearer ${jwt}` }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${jwt}`
+        },
+        params: {
+          search,
+          page
+        }
       };
-      let url;
-      if (currentPage) {
-        url = `${C.APIS.FETCH_FACEBOOK_PAGES}?page=${currentPage}`;
-      } else {
-        url = `${C.APIS.FETCH_FACEBOOK_PAGES}`;
-      }
-      const data = (await axios.get(url, headers)).data;
+      const data = (await axios.get(`${C.APIS.FETCH_FACEBOOK_PAGES}`, config))
+        .data;
       dispatch(setFacebookPages(data.results, data.count));
     } catch (error) {
-      ToastsStore.error("Unable to fetch Facebook pages.");
+      if (error.response.status === C.STATUS_CODES.NOT_FOUND) {
+        setPage(null)
+        dispatch(fetchFacebookPages(jwt, null, null, setPage));
+      } else {
+        ToastsStore.error("Unable to fetch Facebook pages.");
+      }
     }
   };
 };

@@ -13,10 +13,16 @@ const FacebookPages = ({
   fetchFacebookPages
 }) => {
   const [currentPage, setCurrentPage] = useState(null);
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
-    fetchFacebookPages(jwt, currentPage);
+    fetchFacebookPages(jwt, search, currentPage, setCurrentPage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [search, currentPage]);
+
+  const handleSearchChange = e => {
+    setSearch(e.target.value);
+  };
 
   const handlePageChange = currentPage => {
     setCurrentPage(currentPage);
@@ -31,7 +37,14 @@ const FacebookPages = ({
             Search:{" "}
           </label>
           <div className="col-sm-10">
-            <input className="form-control" id="search" type="text" />
+            <input
+              className="form-control"
+              id="search"
+              type="text"
+              value={search}
+              placeholder="Search..."
+              onChange={handleSearchChange}
+            />
           </div>
         </div>
       </div>
