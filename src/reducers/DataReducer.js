@@ -1,7 +1,6 @@
 import {
   ADD_USER_MEDIA,
-  DATA_LOADING_SPINNER_START,
-  DATA_LOADING_SPINNER_STOP
+  DATA_LOADING
 } from '../actions/types'
 import { normalize } from 'normalizr'
 import { mediaSchema } from '../config/schema'
@@ -16,10 +15,8 @@ const INITIAL_STATE = {
 
 const DataReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case DATA_LOADING_SPINNER_START:
-      return { ...state, dataLoading: true }
-    case DATA_LOADING_SPINNER_STOP:
-      return { ...state, dataLoading: false }
+    case DATA_LOADING:
+      return { ...state, dataLoading: action.payload }
     case ADD_USER_MEDIA:
       let normalizedMedia = normalize(action.payload.results, mediaSchema)
       return {

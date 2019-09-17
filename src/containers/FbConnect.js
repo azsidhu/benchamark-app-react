@@ -1,25 +1,19 @@
 import React from 'react'
-import Header from '../components/Header'
+import '../styles/IgConnect.css'
+import '../styles/Global.css'
 
 const FbConnect = ({ history }) => {
   return (
     <div>
-      <Header />
       <div className='container'>
         <div className='container'>
           <div
             className='col-sm-3 offset-sm-4'
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              marginBottom: 60,
-              marginTop: 60
-            }}
+            id='innerContainer'
           >
             <button
               type='submit'
-              className='btn btn-primary btn-md'
-              style={{ marginLeft: 10 }}
+              className='btn btn-primary btn-md connectBtn'
             >
               Facebook connect
             </button>

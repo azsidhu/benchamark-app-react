@@ -17,7 +17,7 @@ const Header = ({ logoutUser }) => {
           height='30'
           className='d-inline-block align-top'
           alt=''
-          style={{ marginRight: 4 }}
+          id='headerImage'
         />
       </p>
       <button

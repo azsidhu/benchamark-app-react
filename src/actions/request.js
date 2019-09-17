@@ -1,26 +1,31 @@
 const axios = require('axios')
 
-export const request = async (requestType, url, token = null, data = null) => {
-  let config = { headers: { Authorization: 'Bearer ' + token } }
+export const makeRequest = ({
+  requestType,
+  url,
+  token = null,
+  data = null,
+  params
+}) => {
+  let config = { headers: { Authorization: 'Bearer ' + token }, params }
   if (!token) config = null
   if (requestType === 'get') {
-    try {
-      const response = await axios.get(url, config)
-      console.log('get response: ', response)
-      return response
-    } catch (error) {
-      if (error.response) {
-        console.log('get error statusText: ', error.response.statusText)
-        console.log('get error status: ', error.response.status)
+    return new Promise((resolve, reject) => {
+      try {
+        const response = axios.get(url, config)
+        resolve(response)
+      } catch (error) {
+        reject(error.response)
       }
-    }
+    })
   } else if (requestType === 'post') {
-    try {
-      const response = await axios.post(url, data, config)
-      console.log('post response: ', response)
-      return response
-    } catch (error) {
-      return error.response
-    }
+    return new Promise((resolve, reject) => {
+      try {
+        const response = axios.post(url, data, config)
+        resolve(response)
+      } catch (error) {
+        reject(error.response)
+      }
+    })
   }
 }

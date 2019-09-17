@@ -9,6 +9,10 @@ import {
 } from 'react-toasts'
 
 const store = configureStore()
+store.subscribe(() => {
+  let currentState = store.getState()
+  if (currentState.user.auth) { localStorage.setItem('auth', JSON.stringify(currentState.user.auth)) } else localStorage.removeItem('auth')
+})
 
 const App = () => {
   return (

@@ -2,3 +2,68 @@
   color: #1565c0;
   cursor: pointer;
 }
+
+#innerContainer{
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+#crawlBtn{
+  margin-left: 10px;
+}
+
+#separateText{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+#connectIgDiv{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+
+#connectIgBtn{
+  background-color: #007bff;  
+  border-radius: 5px;
+  color: white;
+  padding: .5em;
+  text-decoration: none;
+}
+
+#connectIgBtn:focus,
+#connectIgBtn:hover {
+  background-color: #0062cc;
+  color: White;
+}
+
+#igIcon{
+  margin-left: 4px;
+}
+
+#donwloadBtn{
+  margin-top: 3px;
+}
+
+#crawlBtn{
+  margin-bottom: 10px;
+}
+
+#mediaDetailsDiv{
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+#igMediaImg{
+  width: 600px;
+  height: 400px;
+  margin-bottom: 10px;
+}
+
+#crawlAgainBtn{
+  margin-top: 10px;
+}
