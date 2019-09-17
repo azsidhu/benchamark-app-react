@@ -9,6 +9,7 @@ import {
   checkIsConnected,
   fetchFacebookProfile
 } from "./FacebookConnectActions";
+import FacebookPages from '../FacebookPages/FacebookPages'
 import Header from "../../components/Header";
 
 const FacebookConnect = ({
@@ -42,7 +43,7 @@ const FacebookConnect = ({
 
   const handleResponse = response => {
     if (response.status === C.FACEBOOK_STATUS_UNKNOW) {
-      ToastsStore.error("Unable to connect with Facebook.")
+      ToastsStore.error("Unable to connect with Facebook.");
     } else {
       checkPermissions(response);
     }
@@ -69,19 +70,8 @@ const FacebookConnect = ({
     <div>
       <Header />
       <div className="container">
-        <div className="container">
-          <div
-            className="col-sm-3 offset-sm-4"
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: 60,
-              marginTop: 60
-            }}
-          >
-            {button}
-          </div>
-        </div>
+        <div className="text-center mt-3">{button}</div>
+        <FacebookPages />
       </div>
     </div>
   );
