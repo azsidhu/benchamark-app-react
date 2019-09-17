@@ -12,7 +12,7 @@ const FacebookPages = ({
   setFacebookPages,
   fetchFacebookPages
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(null);
   useEffect(() => {
     fetchFacebookPages(jwt, currentPage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
