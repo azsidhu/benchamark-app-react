@@ -1,23 +1,20 @@
 import React from 'react'
-import Header from '../components/Header'
 import '../styles/IgConnect.css'
 
-const pageResults = ({ history, location }) => {
+const pageResults = ({ location }) => {
   let url =
     'https://icon-library.net/images/no-image-available-icon/no-image-available-icon-6.jpg'
   let media
   if (location.data) {
     media = location.data.media
     url = media.media_url
-    //console.log('media: ', media)
   }
   return (
     <div>
-      <Header />
       <div className='container'>
         <div
           className='col-sm-10 offset-sm-1'
-          style={{ marginTop: 20, marginBottom: 30 }}
+          id='mediaDetailsDiv'
         >
           <div className='tableHeadContainer'>
             <h4>Media Details</h4>
@@ -27,7 +24,7 @@ const pageResults = ({ history, location }) => {
               src={url}
               className='mr-3'
               alt='...'
-              style={{ width: 600, height: 400, marginBottom: 5 }}
+              id='igMediaImg'
             />
           </div>
           <div className='media-body'>

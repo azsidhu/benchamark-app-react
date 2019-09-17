@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
 import '../styles/IgConnect.css'
 import '../styles/Global.css'
 import { images } from '../assets/images'
@@ -13,6 +12,7 @@ import * as moment from 'moment-timezone'
 import { saveAs } from 'file-saver'
 import * as JSZip from 'jszip'
 import * as JSZipUtils from 'jszip-utils'
+import { InstaRedirect } from '../config/urls'
 
 const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
   // local state variables
@@ -29,10 +29,13 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
 
   useEffect(
     () => {
-      console.log('searchText:',searchText.length>1?searchText:'')
-      fetchUserMedia(auth.access, currentPage, searchText.length>1?searchText:'')
+      fetchUserMedia(
+        auth.access,
+        currentPage,
+        searchText.length > 1 ? searchText : ''
+      )
     },
-    [currentPage,searchText] // eslint-disable-line
+    [currentPage, searchText] // eslint-disable-line
   )
   // helper methods for component
   const populateUrls = () => {
@@ -71,9 +74,12 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
   const renderMediaRows = () => {
     return instaMediaIds.map((id, index) => {
       const { created_at, insta_user_id } = instaMedia[id]
-      const { media_type, likes_count, comments_count, filter_used } = instaMedia[
-        id
-      ].media_insights[0]
+      const {
+        media_type,
+        likes_count,
+        comments_count,
+        filter_used
+      } = instaMedia[id].media_insights[0]
       let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
       return (
         <tr key={index}>
@@ -121,17 +127,8 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
   }
   return (
     <div>
-      <Header />
       <div className='container'>
-        <div
-          className='col-sm-3 offset-sm-4'
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            marginTop: 20,
-            marginBottom: 10
-          }}
-        >
+        <div className='col-sm-3 offset-sm-4' id='innerContainer'>
           <input
             type='text'
             className='form-control'
@@ -143,32 +140,16 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
             type='submit'
             className='btn btn-primary btn-md'
             onClick={handleCrawlClick}
-            style={{ marginLeft: 10 }}
+            id='crawlBtn'
           >
             Crawl
           </button>
         </div>
-        <div
-          className='col-sm-3 offset-sm-4'
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginBottom: 10
-          }}
-        >
+        <div className='col-sm-3 offset-sm-4' id='separateText'>
           <h5>{' OR '}</h5>
         </div>
-        <div
-          className='col-sm-3 offset-sm-4'
-          style={{ display: 'flex', flexDirection: 'row', marginBottom: 30 }}
-        >
-          <button
-            type='submit'
-            className='btn btn-primary btn-md'
-            onClick={() => history.push('/instaRedirect')}
-            style={{ marginLeft: 10 }}
-          >
+        <div className='col-sm-3 offset-sm-4' id='connectIgDiv'>
+          <a href={InstaRedirect} id='connectIgBtn' role='button'>
             Connect to Instagram
             <img
               src={images.instaLogo}
@@ -176,9 +157,9 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
               height='30'
               className='d-inline-block align-top'
               alt=''
-              style={{ marginLeft: 4 }}
+              id='igIcon'
             />
-          </button>
+          </a>
         </div>
         <div className='col-sm-9 offset-sm-1'>
           <div className='tableHeadContainer'>
@@ -228,7 +209,7 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
                   ? () => imagesDownloader(imageUrls)
                   : ToastsStore.error('No images to download!!')
               }
-              style={{ marginTop: 3 }}
+              id='donwloadBtn'
             >
               Download this page images
             </button>

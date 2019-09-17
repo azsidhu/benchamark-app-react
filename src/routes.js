@@ -1,6 +1,7 @@
 import React from 'react'
 import { Router, Switch, Route, Redirect } from 'react-router-dom'
-import history from './config/hisroty'
+import history from './config/history'
+import Header from '../src/components/Header'
 import {
   LoginScreen,
   SignupScreen,
@@ -11,7 +12,6 @@ import {
   IgPageResults
 } from './containers'
 import { connect, useSelector } from 'react-redux'
-import { InstaRedirect } from './config/urls'
 
 const Routes = () => {
   const auth = useSelector(state => state.user.auth)
@@ -25,22 +25,16 @@ const Routes = () => {
   )
   return (
     <Router history={history}>
+      {auth ? <Header /> : <div />}
+      <Route path='/login' component={LoginScreen} />
+      <Route path='/signup' component={SignupScreen} />
+      <Route exact path='/' component={LoginScreen} />
       <Switch>
-        <Route exact path='/' component={LoginScreen} />
         <PrivateRoute path='/fbconnect' component={FbConnect} />
         <PrivateRoute path='/igconnect' component={IgConnect} />
         <PrivateRoute path='/twconnect' component={TwConnect} />
         <PrivateRoute path='/igconnected' component={IgConnected} />
         <PrivateRoute path='/igPageResults' component={IgPageResults} />
-        <Route path='/login' component={LoginScreen} />
-        <Route path='/signup' component={SignupScreen} />
-        <Route
-          path='/instaRedirect'
-          component={() => {
-            window.location.href = InstaRedirect
-            return null
-          }}
-        />
       </Switch>
     </Router>
   )

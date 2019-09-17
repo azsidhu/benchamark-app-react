@@ -1,7 +1,6 @@
 import { LoginURL, RegisterURL, FetchProfileURL } from '../config/urls'
 import {
-  AUTH_LOADING_SPINNER_START,
-  AUTH_LOADING_SPINNER_STOP,
+  AUTH_LOADING,
   SET_AUTH_ERROR,
   CLEAR_AUTH_ERROR,
   UPDATE_PROFILE_DATA,
@@ -10,51 +9,67 @@ import {
   CLEAR_NEW_USER,
   LOGOUT_USER
 } from './types'
-import { request } from './request'
+import { makeRequest } from './request'
 import { ToastsStore } from 'react-toasts'
 
 export const loginUser = credentails => {
-  return async dispatch => {
+  return dispatch => {
     dispatch(startAuthLoadingSpinner())
     dispatch(clearAuthError())
-    let response = await request('post', LoginURL, null, credentails)
-    if (!response) {
-      dispatch(
-        setAuthError(
-          'Network error, check your internet connection or application server is down'
-        )
-      )
-    } else if (response.status === 200) {
-      ToastsStore.success('Login successfull')
-      dispatch(updateAuthData(response.data))
-      dispatch(fetchUserProfile(response.data.access))
-    } else if (response.data.detail) {
-      dispatch(setAuthError(response.data.detail))
-    } else {
-      dispatch(setAuthError('Unexpected error occured, please try again'))
-    }
+    makeRequest({ requestType: 'post', url: LoginURL, data: credentails })
+      .then(response => {
+        console.log('login user response: ', response)
+        ToastsStore.success('Login successfull')
+        dispatch(updateAuthData(response.data))
+        dispatch(fetchUserProfile(response.data.access))
+      })
+      .catch(error => {
+        console.log('login user error: ', error)
+        if (!error.response) {
+          dispatch(
+            setAuthError(
+              'Network error, network connection or application server is down'
+            )
+          )
+        } else if (error.response.data.detail) {
+          dispatch(setAuthError(error.response.data.detail))
+        } else {
+          dispatch(setAuthError('Unexpected error occured, please try again'))
+        }
+      })
     dispatch(stopAuthLoadingSpinner())
   }
 }
 
 export const registerUser = credentails => {
-  return async dispatch => {
+  return dispatch => {
     dispatch(startAuthLoadingSpinner())
     dispatch(clearAuthError())
-    let response = await request('post', RegisterURL, null, credentails)
-    if (!response) {
-      dispatch(
-        setAuthError(
-          'Network error, Network error, check your internet connection or application server is down'
-        )
-      )
-    } else if (response.statusText === 'Created') {
-      dispatch(newUserCreated(response.data))
-    } else if (response.data.username) {
-      dispatch(setAuthError(response.data.username[0]))
-    } else {
-      dispatch(setAuthError('Unexpected error occured, please try again'))
-    }
+    makeRequest({
+      requestType: 'post',
+      url: RegisterURL,
+      data: credentails
+    })
+      .then(response => {
+        console.log('signup user response: ', response)
+        if (response.statusText === 'Created') {
+          dispatch(newUserCreated(response.data))
+        }
+      })
+      .catch(error => {
+        console.log('signup user error: ', error)
+        if (!error.response) {
+          dispatch(
+            setAuthError(
+              'Network error, Network error, check your internet connection or application server is down'
+            )
+          )
+        } else if (error.response.data.username) {
+          dispatch(setAuthError(error.response.data.username[0]))
+        } else {
+          dispatch(setAuthError('Unexpected error occured, please try again'))
+        }
+      })
     dispatch(stopAuthLoadingSpinner())
   }
 }
@@ -77,18 +92,24 @@ export const clearNewUser = () => {
 }
 
 const fetchUserProfile = token => {
-  return async dispatch => {
-    let response = await request('get', FetchProfileURL, token)
-    if (response) dispatch(updateProfileData(response.data.results[0]))
+  return dispatch => {
+    makeRequest({ requestType: 'get', url: FetchProfileURL, token })
+      .then(response => {
+        console.log('fetch profile response: ', response)
+        dispatch(updateProfileData(response.data.results[0]))
+      })
+      .catch(error => {
+        console.log('fetch profile error: ', error)
+      })
   }
 }
 
 const startAuthLoadingSpinner = () => {
-  return { type: AUTH_LOADING_SPINNER_START }
+  return { type: AUTH_LOADING, payload: true }
 }
 
 const stopAuthLoadingSpinner = () => {
-  return { type: AUTH_LOADING_SPINNER_STOP }
+  return { type: AUTH_LOADING, payload: false }
 }
 
 const updateAuthData = payload => {

@@ -1,17 +1,23 @@
-import { FetchMediaURL, FetchNewDataURL,CrawlUserURL } from '../config/urls'
+import { FetchMediaURL, FetchNewDataURL, CrawlUserURL } from '../config/urls'
 import {
   ADD_USER_MEDIA,
-  DATA_LOADING_SPINNER_START,
-  DATA_LOADING_SPINNER_STOP
+  DATA_LOADING
 } from './types'
-import { request } from './request'
-import { clientURL } from '../config/urls'
+import { makeRequest } from './request'
 import { ToastsStore } from 'react-toasts'
+import history from '../config/history'
 
-export const fetchUserMedia = (token, page,search='') => {
-  return async dispatch => {
-    let response = await request('get', `${FetchMediaURL}${page}&search=${search}`, token)
-    if (response) dispatch(addUserMedia(response.data))
+export const fetchUserMedia = (token, page, search = '') => {
+  return dispatch => {
+    let params = { page, search }
+    makeRequest({ requestType: 'get', url: FetchMediaURL, params, token })
+      .then(response => {
+        console.log('fetch media response: ', response)
+        dispatch(addUserMedia(response.data))
+      })
+      .catch(error => {
+        console.log('fetch media error: ', error)
+      })
   }
 }
 
@@ -20,35 +26,56 @@ const addUserMedia = payload => {
 }
 
 export const FetchNewData = (token, accessTokenIG) => {
-  console.log('accessTokenIG: ',accessTokenIG)
-  return async dispatch => {
+  return dispatch => {
     dispatch(startDataLoadingSpinner())
-    let response = await request('post', FetchNewDataURL, token, {
-      access_token: accessTokenIG
+    makeRequest({
+      requestType: 'post',
+      url: FetchNewDataURL,
+      token,
+      data: { access_token: accessTokenIG }
     })
-    console.log('FetchNewData response: ', response)
-    if (response) dispatch(stopDataLoadingSpinner())
-    window.location.href = `${clientURL}/igconnected`
-    ToastsStore.success('You account has been connected and data crawled successfully')
+      .then(response => {
+        console.log('fetch new connected Insta user data response: ', response)
+        history.push('/igconnected')
+        ToastsStore.success(
+          'You account has been connected and data crawled successfully'
+        )
+        dispatch(stopDataLoadingSpinner())
+      })
+      .catch(error => {
+        console.log('fetch new Insta user error: ', error)
+        dispatch(stopDataLoadingSpinner())
+      })
   }
 }
 
-export const CrawlNewUser=(token,usertoCrawl)=>{
-  return async dispatch=>{
+export const CrawlNewUser = (token, usertoCrawl) => {
+  return dispatch => {
     dispatch(startDataLoadingSpinner())
-    let response = await request('post', CrawlUserURL, token, {
-      username: usertoCrawl
+    makeRequest({
+      requestType: 'post',
+      url: CrawlUserURL,
+      token,
+      data: {
+        username: usertoCrawl
+      }
     })
-    console.log('Crawl new user response: ', response)
-    if (response) dispatch(stopDataLoadingSpinner())
-    ToastsStore.success('Crawler initiated successfully')
+      .then(response => {
+        console.log('Crawl new user response: ', response)
+        ToastsStore.success('Crawler initiated successfully')
+        dispatch(stopDataLoadingSpinner())
+      })
+      .catch(error => {
+        console.log('Crawl new user error: ', error)
+        dispatch(stopDataLoadingSpinner())
+      })
   }
 }
 
 const startDataLoadingSpinner = () => {
-  return { type: DATA_LOADING_SPINNER_START }
+  return { type: DATA_LOADING, payload: true }
 }
 
 const stopDataLoadingSpinner = () => {
-  return { type: DATA_LOADING_SPINNER_STOP }
+  return { type: DATA_LOADING, payload: false }
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
 import '../styles/IgConnect.css'
 import '../styles/Global.css'
 import { Link } from 'react-router-dom'
@@ -16,7 +15,7 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
   const [currentPage, setCurrentPage] = useState(1)
   // redux store data
   const auth = useSelector(state => state.user.auth)
-  console.log('auth: ',auth)
+  //console.log('auth: ',auth)
   const dataLoading = useSelector(state => state.data.dataLoading)
   const data = useSelector(state => state.data)
   // local scope variables
@@ -24,14 +23,16 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
   const instaMediaIds = data.instaMediaIds
   useEffect(
     () => {
-      if (window.location.href.split('#')[1]) {
+      if (window.location.href.split('#')[1] && !dataLoading) {
+        console.log('dataLoading: ',dataLoading)
+        console.log('making request')
         let accessToken = window.location.href.split('#')[1].split('=')[1]
         if (auth.access) {
           FetchNewData(auth.access, accessToken)
         }
       } else fetchUserMedia(auth.access, currentPage)
     },
-    [currentPage] // eslint-disable-line
+    [currentPage, dataLoading] // eslint-disable-line
   )
   // helper methods for component
   const handlePageChange = pageNumber => {
@@ -70,16 +71,16 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
         }
       }}
     >
-      <Header />
       <div className='container'>
         <div
           className='col-sm-3 offset-sm-1'
-          style={{ marginBottom: 10, marginTop:15 }}
+          id='crawlBtn'
         >
           <button
             type='submit'
             className='btn btn-primary btn-md'
             onClick={() => history.push('/igconnect')}
+            id='crawlAgainBtn'
           >
             Crawl again
           </button>
