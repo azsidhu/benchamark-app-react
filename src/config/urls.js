@@ -1,4 +1,4 @@
-const API = 'https://3442e151.ngrok.io'
+const API = 'http://localhost:8000'
 const clientURL = 'http://localhost:3000'
 const LoginURL = `${API}/accounts/login`
 const RegisterURL = `${API}/accounts/register`

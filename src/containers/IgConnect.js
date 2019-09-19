@@ -9,9 +9,6 @@ import { pageSize } from '../config/static'
 import Pagination from 'react-js-pagination'
 import { ToastsStore } from 'react-toasts'
 import * as moment from 'moment-timezone'
-// import { saveAs } from 'file-saver'
-// import * as JSZip from 'jszip'
-// import * as JSZipUtils from 'jszip-utils'
 import { InstaRedirect } from '../config/urls'
 
 const IgConnect = ({ history, fetchUserMedia, CrawlNewUser, CrawledImagesDownload }) => {

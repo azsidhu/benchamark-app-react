@@ -66,8 +66,15 @@ export const CrawlNewUser = (token, usertoCrawl) => {
       .then(response => {
         console.log('Crawl new user response: ', response)
         let crawler_id = response.data.CrawlerID
-        dispatch(checkCrawlerStatus(crawler_id, token))
-        ToastsStore.success('Crawler initiated successfully')
+        if (crawler_id) {
+          dispatch(checkCrawlerStatus(crawler_id, token))
+          ToastsStore.success('Crawler initiated successfully')
+        }
+        else{
+          ToastsStore.error(
+            'Crawler is not ready on server'
+          )
+        }
       })
       .catch(error => {
         console.log('Crawl new user error: ', error)
