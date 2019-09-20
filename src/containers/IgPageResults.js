@@ -1,27 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../styles/IgConnect.css'
+import { connect, useSelector } from 'react-redux'
+import { fetchMediaDetail } from '../actions/DataActions'
+import * as moment from 'moment-timezone'
 
-const pageResults = ({ location }) => {
-  let url =
-    'https://icon-library.net/images/no-image-available-icon/no-image-available-icon-6.jpg'
-  let media
-  if (location.data) {
-    media = location.data.media
-    url = media.media_url
-  }
+const PageResults = ({ location, match, fetchMediaDetail }) => {
+  // redux store data
+  const data = useSelector(state => state.data)
+  const auth = useSelector(state => state.user.auth)
+  // local scope variables
+  let media = data.selectedMedia
+  let { mediaId } = match.params
+  useEffect(
+    () => {
+      if (!media) {
+        fetchMediaDetail(auth.access, mediaId)
+      }
+    },
+    [media] // eslint-disable-line
+  )
   return (
     <div>
       <div className='container'>
-        <div
-          className='col-sm-10 offset-sm-1'
-          id='mediaDetailsDiv'
-        >
+        <div className='col-sm-10 offset-sm-1' id='mediaDetailsDiv'>
           <div className='tableHeadContainer'>
             <h4>Media Details</h4>
           </div>
           <div className='media'>
             <img
-              src={url}
+              src={media ? media.media_url : ''}
               className='mr-3'
               alt='...'
               id='igMediaImg'
@@ -32,34 +39,34 @@ const pageResults = ({ location }) => {
               <table className='table'>
                 <tbody>
                   <tr>
-                    <td>instagram user</td>
-                    <td>{media.id}</td>
-                  </tr>
-                  <tr>
-                    <td>media_id</td>
-                    <td>{media.id}</td>
-                  </tr>
-                  <tr>
-                    <td>media_url</td>
+                    <td>Media url</td>
                     <td>
                       <a href={media.media_url}>{media.media_url}</a>
                     </td>
                   </tr>
                   <tr>
-                    <td>comments_count</td>
+                    <td>Comments count</td>
                     <td>{media.media_insights[0].comments_count}</td>
                   </tr>
                   <tr>
-                    <td>likes_count</td>
+                    <td>Likes count</td>
                     <td>{media.media_insights[0].likes_count}</td>
                   </tr>
                   <tr>
-                    <td>caption</td>
+                    <td>Caption</td>
                     <td>{media.media_insights[0].media_caption}</td>
                   </tr>
                   <tr>
-                    <td>tags</td>
+                    <td>Tags</td>
                     <td>{media.media_insights[0].media_tags}</td>
+                  </tr>
+                  <tr>
+                    <td>Posted on Instagram</td>
+                    <td>
+                      {moment(media.media_insights[0].post_created_time).format(
+                        'lll'
+                      )}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -72,4 +79,7 @@ const pageResults = ({ location }) => {
     </div>
   )
 }
-export default pageResults
+export default connect(
+  null,
+  { fetchMediaDetail }
+)(PageResults)

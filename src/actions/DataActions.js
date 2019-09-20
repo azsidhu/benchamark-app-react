@@ -1,31 +1,53 @@
 import {
   FetchMediaURL,
+  FetchMediaDetailURL,
   FetchNewDataURL,
   CrawlUserURL,
   CrawlImagesDownloadURL,
   CrawlStatusURL
 } from '../config/urls'
-import { ADD_USER_MEDIA, DATA_LOADING } from './types'
+import {
+  ADD_USER_MEDIA,
+  DATA_LOADING,
+  SET_IGCONNECT_SEARCH_TEXT,
+  SET_SELECTED_MEDIA
+} from './types'
 import { makeRequest } from './request'
 import { ToastsStore } from 'react-toasts'
 import history from '../config/history'
 
 export const fetchUserMedia = (token, page, search = '') => {
   return dispatch => {
+    dispatch(startDataLoadingSpinner())
     let params = { page, search }
     makeRequest({ requestType: 'get', url: FetchMediaURL, params, token })
       .then(response => {
         console.log('fetch media response: ', response)
         dispatch(addUserMedia(response.data))
+        dispatch(stopDataLoadingSpinner())
       })
       .catch(error => {
         console.log('fetch media error: ', error)
+        dispatch(stopDataLoadingSpinner())
       })
   }
 }
 
-const addUserMedia = payload => {
-  return { type: ADD_USER_MEDIA, payload: payload }
+export const fetchMediaDetail = (token, mediaId) => {
+  return dispatch => {
+    makeRequest({
+      requestType: 'get',
+      url: `${FetchMediaDetailURL}/${mediaId}`,
+      token
+    })
+      .then(response => {
+        console.log('fetch media detail response: ', response)
+        dispatch(addMediaDetail(response.data))
+      })
+      .catch(error => {
+        console.log('fetch media detail error: ', error)
+      })
+  }
 }
 
 export const FetchNewData = (token, accessTokenIG) => {
@@ -69,11 +91,9 @@ export const CrawlNewUser = (token, usertoCrawl) => {
         if (crawler_id) {
           dispatch(checkCrawlerStatus(crawler_id, token))
           ToastsStore.success('Crawler initiated successfully')
-        }
-        else{
-          ToastsStore.error(
-            'Crawler is not ready on server'
-          )
+        } else {
+          ToastsStore.error('Crawler is not ready on server')
+          dispatch(stopDataLoadingSpinner())
         }
       })
       .catch(error => {
@@ -134,10 +154,40 @@ export const CrawledImagesDownload = (token, crawlerID) => {
   }
 }
 
+const addUserMedia = payload => {
+  return { type: ADD_USER_MEDIA, payload: payload }
+}
+
+export const setIgConnectSearchText = searchText => {
+  return dispatch => {
+    dispatch(setSearchText(searchText))
+  }
+}
+
+export const setSelectedMedia = media => {
+  return dispatch => {
+    dispatch(setMedia(media))
+  }
+}
+
+export const addMediaDetail = media => {
+  return dispatch => {
+    dispatch(setMedia(media))
+  }
+}
+
 const startDataLoadingSpinner = () => {
   return { type: DATA_LOADING, payload: true }
 }
 
 const stopDataLoadingSpinner = () => {
   return { type: DATA_LOADING, payload: false }
+}
+
+const setSearchText = searchText => {
+  return { type: SET_IGCONNECT_SEARCH_TEXT, payload: searchText }
+}
+
+const setMedia = media => {
+  return { type: SET_SELECTED_MEDIA, payload: media }
 }

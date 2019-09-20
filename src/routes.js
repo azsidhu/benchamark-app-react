@@ -34,7 +34,7 @@ const Routes = () => {
         <PrivateRoute path='/igconnect' component={IgConnect} />
         <PrivateRoute path='/twconnect' component={TwConnect} />
         <PrivateRoute path='/igconnected' component={IgConnected} />
-        <PrivateRoute path='/igPageResults' component={IgPageResults} />
+        <PrivateRoute path='/igPageResults/:mediaId' component={IgPageResults} />
       </Switch>
     </Router>
   )
