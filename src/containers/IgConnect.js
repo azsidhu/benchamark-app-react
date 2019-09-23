@@ -3,15 +3,27 @@ import '../styles/IgConnect.css'
 import '../styles/Global.css'
 import { images } from '../assets/images'
 import { connect, useSelector } from 'react-redux'
-import { fetchUserMedia, CrawlNewUser, CrawledImagesDownload } from '../actions/DataActions'
+import {
+  fetchUserMedia,
+  CrawlNewUser,
+  setIgConnectSearchText,
+  setSelectedMedia
+} from '../actions/DataActions'
 import { Link } from 'react-router-dom'
 import { pageSize } from '../config/static'
 import Pagination from 'react-js-pagination'
 import { ToastsStore } from 'react-toasts'
 import * as moment from 'moment-timezone'
 import { InstaRedirect } from '../config/urls'
+import { ClipLoader } from 'react-spinners'
 
-const IgConnect = ({ history, fetchUserMedia, CrawlNewUser, CrawledImagesDownload }) => {
+const IgConnect = ({
+  history,
+  fetchUserMedia,
+  CrawlNewUser,
+  setIgConnectSearchText,
+  setSelectedMedia
+}) => {
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
   const [username, setUsername] = useState('')
@@ -22,9 +34,14 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser, CrawledImagesDownloa
   // local scope variables
   const instaMedia = data.instaMedia
   const instaMediaIds = data.instaMediaIds
+  const igConnectSearchText = data.igConnectSearchText
 
   useEffect(
     () => {
+      if (igConnectSearchText) {
+        setSearchText(igConnectSearchText)
+        setIgConnectSearchText('')
+      }
       fetchUserMedia(
         auth.access,
         currentPage,
@@ -62,11 +79,10 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser, CrawledImagesDownloa
           <td>{comments_count}</td>
           <td className='detailsRow'>
             <Link
-              to={{
-                pathname: '/igPageResults',
-                data: {
-                  media: instaMedia[id]
-                }
+              to={`/igPageResults/${id}`}
+              onClick={() => {
+                setIgConnectSearchText(searchText)
+                setSelectedMedia(instaMedia[id])
               }}
             >
               details
@@ -137,6 +153,7 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser, CrawledImagesDownloa
                 className='form-control'
                 id='inputSearchText'
                 onChange={handleTextInputChange}
+                value={searchText}
               />
             </div>
           </div>
@@ -153,36 +170,36 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser, CrawledImagesDownloa
                 <th scope='col'>Visit</th>
               </tr>
             </thead>
-            <tbody>{renderMediaRows()}</tbody>
+            <tbody>{data.dataLoading ? <tr /> : renderMediaRows()}</tbody>
           </table>
-          <div className='pagginationDiv'>
-            <Pagination
-              activePage={currentPage}
-              itemsCountPerPage={pageSize}
-              totalItemsCount={data.mediaCount}
-              pageRangeDisplayed={5}
-              onChange={handlePageChange}
-              itemClass='page-item'
-              linkClass='page-link'
-            />
-          </div>
-          <div className='col-sm-5'>
-            <button
-              type='submit'
-              className='btn btn-primary btn-md'
-              onClick={()=>CrawledImagesDownload(auth.access)}
-              id='donwloadBtn'
-            >
-              Download this page images
-            </button>
-          </div>
+          {data.dataLoading ? (
+            <div className='col-sm-5 offset-sm-5'>
+              <ClipLoader sizeUnit={'px'} size={50} color={'#123abc'} loading />
+            </div>
+          ) : (
+            <div className='pagginationDiv'>
+              <Pagination
+                activePage={currentPage}
+                itemsCountPerPage={pageSize}
+                totalItemsCount={data.mediaCount}
+                pageRangeDisplayed={5}
+                onChange={handlePageChange}
+                itemClass='page-item'
+                linkClass='page-link'
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
   )
 }
-
 export default connect(
   null,
-  { fetchUserMedia, CrawlNewUser, CrawledImagesDownload }
+  {
+    fetchUserMedia,
+    CrawlNewUser,
+    setIgConnectSearchText,
+    setSelectedMedia
+  }
 )(IgConnect)

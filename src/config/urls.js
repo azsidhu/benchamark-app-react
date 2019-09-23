@@ -4,6 +4,7 @@ const LoginURL = `${API}/accounts/login`
 const RegisterURL = `${API}/accounts/register`
 const FetchProfileURL = `${API}/instagram_benchmark/profile`
 const FetchMediaURL = `${API}/instagram_benchmark/media?page=`
+const FetchMediaDetailURL = `${API}/instagram_benchmark/media/revision`
 const CrawlUserURL = `${API}/instagram_benchmark/profile/crawl`
 const CrawlStatusURL = `${API}/instagram_benchmark/profile/crawl/status`
 const CrawlImagesDownloadURL = `${API}/instagram_benchmark/profile/crawl/zip`
@@ -18,6 +19,7 @@ export {
   RegisterURL,
   FetchProfileURL,
   FetchMediaURL,
+  FetchMediaDetailURL,
   InstaRedirect,
   FetchNewDataURL,
   CrawlUserURL,

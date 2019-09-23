@@ -1,6 +1,9 @@
 import {
   ADD_USER_MEDIA,
-  DATA_LOADING
+  DATA_LOADING,
+  SET_IGCONNECT_SEARCH_TEXT,
+  SET_SELECTED_MEDIA,
+  ADD_MEDIA_DETAIL
 } from '../actions/types'
 import { normalize } from 'normalizr'
 import { mediaSchema } from '../config/schema'
@@ -10,7 +13,9 @@ const INITIAL_STATE = {
   instaMediaIds: [],
   mediaCount: 0,
   nextMedia: null,
-  dataLoading: false
+  dataLoading: false,
+  igConnectSearchText: '',
+  selectedMedia: null
 }
 
 const DataReducer = (state = INITIAL_STATE, action) => {
@@ -26,6 +31,10 @@ const DataReducer = (state = INITIAL_STATE, action) => {
         mediaCount: action.payload.count,
         nextMedia: action.payload.next
       }
+    case SET_IGCONNECT_SEARCH_TEXT:
+      return { ...state, igConnectSearchText: action.payload }
+    case SET_SELECTED_MEDIA || ADD_MEDIA_DETAIL:
+      return { ...state, selectedMedia: action.payload }
     default:
       return { ...state }
   }
