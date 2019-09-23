@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import '../styles/IgConnect.css'
-import '../styles/Global.css'
 import { Link } from 'react-router-dom'
-import { FetchNewData, fetchUserMedia } from '../actions/DataActions'
+import { FetchNewData, fetchUserMedia } from '../../actions/DataActions'
 import { connect, useSelector } from 'react-redux'
 import LoadingOverlay from 'react-loading-overlay'
 import Loader from 'react-spinners/ClipLoader'
-import { pageSize } from '../config/static'
+import { pageSize } from '../../config/static'
 import Pagination from 'react-js-pagination'
+import Button from '../../components/Button'
+import {
+  TableHeadContainer,
+  TableHeading,
+  TableSearchContainer,
+  TableSearchLabel,
+  TableSearchInput,
+  Table,
+  PagginationDiv,
+  DetailColumn
+} from './styled'
 var moment = require('moment')
 
 const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
@@ -24,13 +33,11 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
   useEffect(
     () => {
       if (window.location.href.split('#')[1] && !dataLoading) {
-        console.log('dataLoading: ', dataLoading)
-        console.log('making request')
         let accessToken = window.location.href.split('#')[1].split('=')[1]
         if (auth.access) {
           FetchNewData(auth.access, accessToken)
         }
-      } else fetchUserMedia(auth.access, currentPage)
+      }
     },
     [currentPage, dataLoading] // eslint-disable-line
   )
@@ -46,15 +53,39 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
       ].media_insights[0]
       return (
         <tr key={index}>
-          <td>{id}</td>
-          <td>{media_type}</td>
-          <td>{moment(created_at).format('lll')}</td>
-          <td>{likes_count}</td>
-          <td>{comments_count}</td>
-          <td className='detailsRow'>
+          {renderColumnData([
+            id,
+            media_type,
+            moment(created_at).format('lll'),
+            likes_count,
+            comments_count
+          ])}
+          <DetailColumn>
             <Link to='/igPageResults'>details</Link>
-          </td>
+          </DetailColumn>
         </tr>
+      )
+    })
+  }
+  const renderColumnData = dataList => {
+    return dataList.map((item, index) => {
+      return <td key={index}>{item}</td>
+    })
+  }
+  const renderColumnHeadings = () => {
+    let columnsToRender = [
+      'Id',
+      'Media type',
+      'Crawl time',
+      'Likes',
+      'Comments',
+      'Visit'
+    ]
+    return columnsToRender.map((item, index) => {
+      return (
+        <th scope='col' key={index}>
+          {item}
+        </th>
       )
     })
   }
@@ -72,42 +103,37 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
       }}
     >
       <div className='container'>
-        <div className='col-sm-3 offset-sm-1' id='crawlBtn'>
-          <button
+        <div className='col-sm-2'>
+          <Button
             type='submit'
-            className='btn btn-primary btn-md'
             onClick={() => history.push('/igconnect')}
-            id='crawlAgainBtn'
+            marginTop='20px'
+            marginBottom='10px'
           >
             Crawl again
-          </button>
+          </Button>
         </div>
         <div className='col-sm-9 offset-sm-1'>
-          <div className='tableHeadContainer'>
-            <h4>Recent crawl results</h4>
-            <div className='tableSearchContainer'>
-              <label htmlFor='inputPassword'>Search:</label>
-              <input
+          <TableHeadContainer>
+            <TableHeading>Recent crawl results</TableHeading>
+            <TableSearchContainer>
+              <TableSearchLabel htmlFor='inputPassword'>
+                Search:
+              </TableSearchLabel>
+              <TableSearchInput
                 type='text'
                 className='form-control'
                 id='inputSearchText'
               />
-            </div>
-          </div>
-          <table className='table'>
+            </TableSearchContainer>
+          </TableHeadContainer>
+          <Table className='table'>
             <thead className='thead-dark'>
-              <tr>
-                <th scope='col'>Id</th>
-                <th scope='col'>Media Type</th>
-                <th scope='col'>Last Crawl</th>
-                <th scope='col'>Likes count</th>
-                <th scope='col'>Comments count</th>
-                <th scope='col'>Visit</th>
-              </tr>
+              <tr>{renderColumnHeadings()}</tr>
             </thead>
             <tbody>{renderMediaRows()}</tbody>
-          </table>
-          <div className='pagginationDiv'>
+          </Table>
+          <PagginationDiv>
             <Pagination
               activePage={currentPage}
               itemsCountPerPage={pageSize}
@@ -117,7 +143,7 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
               itemClass='page-item'
               linkClass='page-link'
             />
-          </div>
+          </PagginationDiv>
         </div>
       </div>
     </LoadingOverlay>

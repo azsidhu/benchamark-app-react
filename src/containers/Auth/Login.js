@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import '../styles/Login.css'
-import { loginUser, clearError } from '../actions/AuthActions'
+import { loginUser, clearError } from '../../actions/AuthActions'
 import { connect, useSelector } from 'react-redux'
 import { ToastsStore } from 'react-toasts'
+import Button from '../../components/Button'
+import {
+  LoginRow,
+  LoginColumn,
+  SwitchModeDiv,
+  SwitchModeLink,
+  RequiredLabel
+} from './styled'
 
 const Login = ({ history, loginUser, clearError }) => {
   // local state
@@ -41,13 +48,11 @@ const Login = ({ history, loginUser, clearError }) => {
   }
   return (
     <div className='container'>
-      <div className='row loginRow'>
-        <div className='col-sm-5 offset-sm-4 loginColumn'>
+      <LoginRow className='row'>
+        <LoginColumn className='col-sm-5 offset-sm-4'>
           <form>
             <div className='form-group'>
-              <label htmlFor='inputUsername' className='required'>
-                Username
-              </label>
+              <RequiredLabel htmlFor='inputUsername'>Username</RequiredLabel>
               <input
                 type='text'
                 value={username}
@@ -58,9 +63,7 @@ const Login = ({ history, loginUser, clearError }) => {
               />
             </div>
             <div className='form-group'>
-              <label htmlFor='inputPassword' className='required'>
-                Password
-              </label>
+              <RequiredLabel htmlFor='inputPassword'>Password</RequiredLabel>
               <input
                 type='password'
                 value={password}
@@ -72,25 +75,18 @@ const Login = ({ history, loginUser, clearError }) => {
             </div>
           </form>
           <div className='col-sm-6 offset-sm-3'>
-            <button
-              type='submit'
-              className='btn btn-primary btn-sm btn-block'
-              onClick={() => handleLoginBtnClick()}
-            >
+            <Button type='submit' onClick={() => handleLoginBtnClick()}>
               Login
-            </button>
+            </Button>
           </div>
-          <div className='switchModeDiv'>
+          <SwitchModeDiv>
             <p>Don't have an account?</p>
-            <p
-              className='switchModeLink'
-              onClick={() => history.push('/signup')}
-            >
+            <SwitchModeLink onClick={() => history.push('/signup')}>
               Signup
-            </p>
-          </div>
-        </div>
-      </div>
+            </SwitchModeLink>
+          </SwitchModeDiv>
+        </LoginColumn>
+      </LoginRow>
     </div>
   )
 }

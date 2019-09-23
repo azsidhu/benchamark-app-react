@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import '../styles/Login.css'
-import { registerUser, clearError, clearNewUser } from '../actions/AuthActions'
+import {
+  registerUser,
+  clearError,
+  clearNewUser
+} from '../../actions/AuthActions'
 import { connect, useSelector } from 'react-redux'
-import { validateEmail } from '../config/static'
+import { validateEmail } from '../../config/static'
 import { ToastsStore } from 'react-toasts'
+import Button from '../../components/Button'
+import {
+  LoginRow,
+  LoginColumn,
+  SwitchModeDiv,
+  SwitchModeLink,
+  RequiredLabel
+} from './styled'
 
 const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
   // local state
@@ -16,7 +27,9 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
   useEffect(
     () => {
       if (newUser) {
-        ToastsStore.success('Account created successfully, login and start using now!')
+        ToastsStore.success(
+          'Account created successfully, login and start using now!'
+        )
         history.push('/login')
         clearNewUser()
       }
@@ -56,13 +69,11 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
   }
   return (
     <div className='container'>
-      <div className='row loginRow'>
-        <div className='col-sm-5 offset-sm-4 loginColumn'>
+      <LoginRow className='row'>
+        <LoginColumn className='col-sm-5 offset-sm-4'>
           <form>
             <div className='form-group'>
-              <label htmlFor='inputUsername' className='required'>
-                Username
-              </label>
+              <RequiredLabel htmlFor='inputUsername'>Username</RequiredLabel>
               <input
                 type='text'
                 value={username}
@@ -84,9 +95,7 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
               />
             </div>
             <div className='form-group'>
-              <label htmlFor='inputPassword' className='required'>
-                Password
-              </label>
+              <RequiredLabel htmlFor='inputPassword'>Password</RequiredLabel>
               <input
                 type='password'
                 value={password}
@@ -98,25 +107,18 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
             </div>
           </form>
           <div className='col-sm-6 offset-sm-3'>
-            <button
-              type='submit'
-              className='btn btn-primary btn-sm btn-block'
-              onClick={() => handleSignupBtnClick()}
-            >
+            <Button type='submit' onClick={() => handleSignupBtnClick()}>
               Signup
-            </button>
+            </Button>
           </div>
-          <div className='switchModeDiv'>
+          <SwitchModeDiv>
             <p>Already have an account?</p>
-            <p
-              className='switchModeLink'
-              onClick={() => history.push('/login')}
-            >
+            <SwitchModeLink onClick={() => history.push('/login')}>
               Login
-            </p>
-          </div>
-        </div>
-      </div>
+            </SwitchModeLink>
+          </SwitchModeDiv>
+        </LoginColumn>
+      </LoginRow>
     </div>
   )
 }

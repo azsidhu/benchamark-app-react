@@ -61,11 +61,12 @@ export const FetchNewData = (token, accessTokenIG) => {
     })
       .then(response => {
         console.log('fetch new connected Insta user data response: ', response)
-        history.push('/igconnected')
+        dispatch(fetchUserMedia(token, 1))
         ToastsStore.success(
-          'You account has been connected and data crawled successfully'
+          'You account has been connected and data fetched successfully'
         )
         dispatch(stopDataLoadingSpinner())
+        history.push('/igconnected')
       })
       .catch(error => {
         console.log('fetch new Insta user error: ', error)

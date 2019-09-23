@@ -1,21 +1,24 @@
 import React from 'react'
 import { Route, NavLink, withRouter } from 'react-router-dom'
-import '../styles/Header.css'
 import { Colors } from '../config/colors'
+import styled from 'styled-components'
 
+const NavItem = styled(NavLink)`
+  cursor: pointer;
+`
 const CustomNavLink = ({ to, location, text }) => {
   return (
     <Route
       path={to}
       children={() => (
-        <NavLink
+        <NavItem
           replace={to === location.pathname}
           to={to}
-          className='nav-link navItemText'
+          className='nav-link'
           activeStyle={activeStyles}
         >
           {text}
-        </NavLink>
+        </NavItem>
       )}
     />
   )
