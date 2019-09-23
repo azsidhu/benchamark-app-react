@@ -1,8 +1,11 @@
-import { FetchMediaURL, FetchNewDataURL, CrawlUserURL } from '../config/urls'
 import {
-  ADD_USER_MEDIA,
-  DATA_LOADING
-} from './types'
+  FetchMediaURL,
+  FetchNewDataURL,
+  CrawlUserURL,
+  CrawlImagesDownloadURL,
+  CrawlStatusURL
+} from '../config/urls'
+import { ADD_USER_MEDIA, DATA_LOADING } from './types'
 import { makeRequest } from './request'
 import { ToastsStore } from 'react-toasts'
 import history from '../config/history'
@@ -62,12 +65,71 @@ export const CrawlNewUser = (token, usertoCrawl) => {
     })
       .then(response => {
         console.log('Crawl new user response: ', response)
-        ToastsStore.success('Crawler initiated successfully')
-        dispatch(stopDataLoadingSpinner())
+        let crawler_id = response.data.CrawlerID
+        if (crawler_id) {
+          dispatch(checkCrawlerStatus(crawler_id, token))
+          ToastsStore.success('Crawler initiated successfully')
+        }
+        else{
+          ToastsStore.error(
+            'Crawler is not ready on server'
+          )
+        }
       })
       .catch(error => {
         console.log('Crawl new user error: ', error)
         dispatch(stopDataLoadingSpinner())
+      })
+  }
+}
+
+export const checkCrawlerStatus = (crawler_id, token) => {
+  return dispatch => {
+    let timerId = setInterval(() => {
+      makeRequest({
+        requestType: 'get',
+        url: `${CrawlStatusURL}/${crawler_id}`,
+        token
+      })
+        .then(response => {
+          console.log('Crawl check status response: ', response)
+          let status = response.data.status
+          if (status === 'Completed') {
+            dispatch(CrawledImagesDownload(token, crawler_id))
+            clearInterval(timerId)
+          } else if (status === 'Invalid_Profile') {
+            ToastsStore.error(
+              'This Instagram user either public or does not exists.'
+            )
+            dispatch(stopDataLoadingSpinner())
+            clearInterval(timerId)
+          }
+        })
+        .catch(error => {
+          console.log('Crawl check status error: ', error)
+          dispatch(stopDataLoadingSpinner())
+          ToastsStore.error('Allow popups for this site in browser')
+        })
+    }, 5000)
+  }
+}
+
+export const CrawledImagesDownload = (token, crawlerID) => {
+  return dispatch => {
+    makeRequest({
+      requestType: 'get',
+      url: `${CrawlImagesDownloadURL}/${crawlerID}`,
+      token
+    })
+      .then(response => {
+        if (response.config) {
+          dispatch(stopDataLoadingSpinner())
+          console.log('Crawled images download response: ', response.config)
+          window.open(response.config.url)
+        }
+      })
+      .catch(error => {
+        console.log('Crawled images download error: ', error)
       })
   }
 }

@@ -3,23 +3,19 @@ import '../styles/IgConnect.css'
 import '../styles/Global.css'
 import { images } from '../assets/images'
 import { connect, useSelector } from 'react-redux'
-import { fetchUserMedia, CrawlNewUser } from '../actions/DataActions'
+import { fetchUserMedia, CrawlNewUser, CrawledImagesDownload } from '../actions/DataActions'
 import { Link } from 'react-router-dom'
 import { pageSize } from '../config/static'
 import Pagination from 'react-js-pagination'
 import { ToastsStore } from 'react-toasts'
 import * as moment from 'moment-timezone'
-import { saveAs } from 'file-saver'
-import * as JSZip from 'jszip'
-import * as JSZipUtils from 'jszip-utils'
 import { InstaRedirect } from '../config/urls'
 
-const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
+const IgConnect = ({ history, fetchUserMedia, CrawlNewUser, CrawledImagesDownload }) => {
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
   const [username, setUsername] = useState('')
   const [searchText, setSearchText] = useState('')
-  const [imageUrls, setImageUrls] = useState([])
   // redux store data
   const auth = useSelector(state => state.user.auth)
   const data = useSelector(state => state.data)
@@ -38,36 +34,6 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
     [currentPage, searchText] // eslint-disable-line
   )
   // helper methods for component
-  const populateUrls = () => {
-    return instaMediaIds.map((id, index) => {
-      const { media_url } = instaMedia[id]
-      if (imageUrls.length < pageSize) {
-        setImageUrls([...imageUrls, imageUrls.push(media_url)])
-      }
-      return index
-    })
-  }
-  populateUrls()
-  const imagesDownloader = urls => {
-    var zip = new JSZip()
-    var count = 0
-    var zipFilename = 'crawlImagesIG.zip'
-    urls.forEach(function (url) {
-      // loading a file and add it in a zip file
-      JSZipUtils.getBinaryContent(url, function (err, data) {
-        if (err) {
-          throw err // or handle the error
-        }
-        zip.file(`image${count + 1}`, data, { binary: true })
-        count++
-        if (count === urls.length) {
-          zip.generateAsync({ type: 'blob' }).then(function (content) {
-            saveAs(content, zipFilename)
-          })
-        }
-      })
-    })
-  }
   const handlePageChange = pageNumber => {
     setCurrentPage(Number(pageNumber))
   }
@@ -204,11 +170,7 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
             <button
               type='submit'
               className='btn btn-primary btn-md'
-              onClick={
-                imageUrls.length !== 0
-                  ? () => imagesDownloader(imageUrls)
-                  : ToastsStore.error('No images to download!!')
-              }
+              onClick={()=>CrawledImagesDownload(auth.access)}
               id='donwloadBtn'
             >
               Download this page images
@@ -222,5 +184,5 @@ const IgConnect = ({ history, fetchUserMedia, CrawlNewUser }) => {
 
 export default connect(
   null,
-  { fetchUserMedia, CrawlNewUser }
+  { fetchUserMedia, CrawlNewUser, CrawledImagesDownload }
 )(IgConnect)
