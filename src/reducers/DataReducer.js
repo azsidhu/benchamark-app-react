@@ -12,7 +12,6 @@ const INITIAL_STATE = {
   instaMedia: {},
   instaMediaIds: [],
   mediaCount: 0,
-  nextMedia: null,
   dataLoading: false,
   igConnectSearchText: '',
   selectedMedia: null
@@ -28,8 +27,7 @@ const DataReducer = (state = INITIAL_STATE, action) => {
         ...state,
         instaMedia: normalizedMedia.entities.media,
         instaMediaIds: normalizedMedia.result,
-        mediaCount: action.payload.count,
-        nextMedia: action.payload.next
+        mediaCount: action.payload.count
       }
     case SET_IGCONNECT_SEARCH_TEXT:
       return { ...state, igConnectSearchText: action.payload }

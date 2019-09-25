@@ -11,18 +11,16 @@ const InnerContainer = styled.div`
 
 const TwConnect = ({ history }) => {
   return (
-    <div>
-      <div className='container'>
-        <InnerContainer className='col-sm-3 offset-sm-4'>
-          <Button
-            type='submit'
-            className='btn btn-primary btn-md'
-            marginLeft='10px'
-          >
-            Twitter connect
-          </Button>
-        </InnerContainer>
-      </div>
+    <div className='container'>
+      <InnerContainer className='col-sm-3 offset-sm-4'>
+        <Button
+          type='submit'
+          className='btn btn-primary btn-md'
+          marginLeft='10px'
+        >
+          Twitter connect
+        </Button>
+      </InnerContainer>
     </div>
   )
 }

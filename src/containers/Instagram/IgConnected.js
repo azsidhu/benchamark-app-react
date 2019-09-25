@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FetchNewData, fetchUserMedia } from '../../actions/DataActions'
 import { connect, useSelector } from 'react-redux'
-import LoadingOverlay from 'react-loading-overlay'
-import Loader from 'react-spinners/ClipLoader'
+import { ClipLoader } from 'react-spinners'
 import { pageSize } from '../../config/static'
 import Pagination from 'react-js-pagination'
 import Button from '../../components/Button'
+import shortid from 'shortid'
 import {
   TableHeadContainer,
   TableHeading,
@@ -17,31 +17,41 @@ import {
   PagginationDiv,
   DetailColumn
 } from './styled'
+import {
+  tokenSelector,
+  mediaSelector,
+  mediaCountSelector,
+  mediaIdsSelector,
+  dataLoadingSelector
+} from '../../selectors/index'
 var moment = require('moment')
 
 const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
-  // redux store data
-  const auth = useSelector(state => state.user.auth)
-  // console.log('auth: ',auth)
-  const dataLoading = useSelector(state => state.data.dataLoading)
-  const data = useSelector(state => state.data)
-  // local scope variables
-  const instaMedia = data.instaMedia
-  const instaMediaIds = data.instaMediaIds
+  // redux store selectors
+  const state = useSelector(state => state)
+  const accessToken = tokenSelector(state)
+  const instaMedia = mediaSelector(state)
+  const instaMediaIds = mediaIdsSelector(state)
+  const dataLoading = dataLoadingSelector(state)
+  const mediaCount = mediaCountSelector(state)
+
   useEffect(
     () => {
       if (window.location.href.split('#')[1] && !dataLoading) {
-        let accessToken = window.location.href.split('#')[1].split('=')[1]
-        if (auth.access) {
-          FetchNewData(auth.access, accessToken)
+        let accessTokenIG = window.location.href.split('#')[1].split('=')[1]
+        if (accessToken) {
+          FetchNewData(accessToken, accessTokenIG)
         }
       }
     },
     [currentPage, dataLoading] // eslint-disable-line
   )
   // helper methods for component
+  const handleCrawlClick = () => {
+    history.push('/igconnect')
+  }
   const handlePageChange = pageNumber => {
     setCurrentPage(Number(pageNumber))
   }
@@ -52,7 +62,7 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
         id
       ].media_insights[0]
       return (
-        <tr key={index}>
+        <tr key={shortid.generate()}>
           {renderColumnData([
             id,
             media_type,
@@ -69,7 +79,7 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
   }
   const renderColumnData = dataList => {
     return dataList.map((item, index) => {
-      return <td key={index}>{item}</td>
+      return <td key={shortid.generate()}>{item}</td>
     })
   }
   const renderColumnHeadings = () => {
@@ -83,70 +93,61 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
     ]
     return columnsToRender.map((item, index) => {
       return (
-        <th scope='col' key={index}>
+        <th scope='col' key={shortid.generate()}>
           {item}
         </th>
       )
     })
   }
   return (
-    <LoadingOverlay
-      active={dataLoading}
-      spinner={<Loader color={'#fff'} />}
-      text='Loading User data...'
-      styles={{
-        wrapper: {
-          width: '100%',
-          height: '100%',
-          overflow: dataLoading ? 'hidden' : 'scroll'
-        }
-      }}
-    >
-      <div className='container'>
-        <div className='col-sm-2'>
-          <Button
-            type='submit'
-            onClick={() => history.push('/igconnect')}
-            marginTop='20px'
-            marginBottom='10px'
-          >
-            Crawl again
-          </Button>
-        </div>
-        <div className='col-sm-9 offset-sm-1'>
-          <TableHeadContainer>
-            <TableHeading>Recent crawl results</TableHeading>
-            <TableSearchContainer>
-              <TableSearchLabel htmlFor='inputPassword'>
-                Search:
-              </TableSearchLabel>
-              <TableSearchInput
-                type='text'
-                className='form-control'
-                id='inputSearchText'
-              />
-            </TableSearchContainer>
-          </TableHeadContainer>
-          <Table className='table'>
-            <thead className='thead-dark'>
-              <tr>{renderColumnHeadings()}</tr>
-            </thead>
-            <tbody>{renderMediaRows()}</tbody>
-          </Table>
+    <div className='container'>
+      <div className='col-sm-2'>
+        <Button
+          type='submit'
+          onClick={handleCrawlClick}
+          marginTop='20px'
+          marginBottom='10px'
+        >
+          Crawl again
+        </Button>
+      </div>
+      <div className='col-sm-9 offset-sm-1'>
+        <TableHeadContainer>
+          <TableHeading>Recent crawl results</TableHeading>
+          <TableSearchContainer>
+            <TableSearchLabel htmlFor='inputPassword'>Search:</TableSearchLabel>
+            <TableSearchInput
+              type='text'
+              className='form-control'
+              id='inputSearchText'
+            />
+          </TableSearchContainer>
+        </TableHeadContainer>
+        <Table className='table'>
+          <thead className='thead-dark'>
+            <tr>{renderColumnHeadings()}</tr>
+          </thead>
+          <tbody>{renderMediaRows()}</tbody>
+        </Table>
+        {dataLoading ? (
+          <div className='col-sm-5 offset-sm-5'>
+            <ClipLoader sizeUnit={'px'} size={50} color={'#123abc'} loading />
+          </div>
+        ) : (
           <PagginationDiv>
             <Pagination
               activePage={currentPage}
               itemsCountPerPage={pageSize}
-              totalItemsCount={data.mediaCount}
+              totalItemsCount={mediaCount}
               pageRangeDisplayed={5}
               onChange={handlePageChange}
               itemClass='page-item'
               linkClass='page-link'
             />
           </PagginationDiv>
-        </div>
+        )}
       </div>
-    </LoadingOverlay>
+    </div>
   )
 }
 export default connect(

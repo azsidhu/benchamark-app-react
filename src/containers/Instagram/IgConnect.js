@@ -16,6 +16,7 @@ import { InstaRedirect } from '../../config/urls'
 import { ClipLoader } from 'react-spinners'
 import Button from '../../components/Button'
 import AnchorButton from '../../components/AnchorButton'
+import shortid from 'shortid'
 import {
   InnerContainer,
   TableHeadContainer,
@@ -30,6 +31,14 @@ import {
   ConnectIgDiv,
   SmallIcon
 } from './styled'
+import {
+  tokenSelector,
+  mediaSelector,
+  mediaCountSelector,
+  mediaIdsSelector,
+  igConnectSearchTextSelector,
+  dataLoadingSelector
+} from '../../selectors/index'
 
 const IgConnect = ({
   history,
@@ -42,13 +51,14 @@ const IgConnect = ({
   const [currentPage, setCurrentPage] = useState(1)
   const [username, setUsername] = useState('')
   const [searchText, setSearchText] = useState('')
-  // redux store data
-  const auth = useSelector(state => state.user.auth)
-  const data = useSelector(state => state.data)
-  // local scope variables
-  const instaMedia = data.instaMedia
-  const instaMediaIds = data.instaMediaIds
-  const igConnectSearchText = data.igConnectSearchText
+  // redux store selectors
+  const state = useSelector(state => state)
+  const accessToken = tokenSelector(state)
+  const instaMedia = mediaSelector(state)
+  const instaMediaIds = mediaIdsSelector(state)
+  const mediaCount = mediaCountSelector(state)
+  const dataLoading = dataLoadingSelector(state)
+  const igConnectSearchText = igConnectSearchTextSelector(state)
 
   useEffect(
     () => {
@@ -57,7 +67,7 @@ const IgConnect = ({
         setIgConnectSearchText('')
       }
       fetchUserMedia(
-        auth.access,
+        accessToken,
         currentPage,
         searchText.length > 1 ? searchText : ''
       )
@@ -80,7 +90,7 @@ const IgConnect = ({
       } = instaMedia[id].media_insights[0]
       let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
       return (
-        <tr key={index}>
+        <tr key={shortid.generate()}>
           {renderColumnData([
             id,
             insta_user_id,
@@ -109,7 +119,7 @@ const IgConnect = ({
   }
   const renderColumnData = dataList => {
     return dataList.map((item, index) => {
-      return <td key={index}>{item}</td>
+      return <td key={shortid.generate()}>{item}</td>
     })
   }
   const renderColumnHeadings = () => {
@@ -125,7 +135,7 @@ const IgConnect = ({
     ]
     return columnsToRender.map((item, index) => {
       return (
-        <th scope='col' key={index}>
+        <th scope='col' key={shortid.generate()}>
           {item}
         </th>
       )
@@ -136,7 +146,7 @@ const IgConnect = ({
     if (username.trim().length === 0) {
       ToastsStore.error('can not crawl an empty username')
     } else {
-      CrawlNewUser(auth.access, username)
+      CrawlNewUser(accessToken, username)
       history.push('/igconnected')
     }
   }
@@ -148,78 +158,74 @@ const IgConnect = ({
     }
   }
   return (
-    <div>
-      <div className='container'>
-        <InnerContainer className='col-sm-3 offset-sm-4'>
-          <input
-            type='text'
-            className='form-control'
-            id='inputIgUser'
-            placeholder='Enter Insta username'
-            onChange={handleTextInputChange}
+    <div className='container'>
+      <InnerContainer className='col-sm-3 offset-sm-4'>
+        <input
+          type='text'
+          className='form-control'
+          id='inputIgUser'
+          placeholder='Enter Insta username'
+          onChange={handleTextInputChange}
+        />
+        <Button
+          type='submit'
+          onClick={handleCrawlClick}
+          marginLeft='10px'
+          paddingHorizontal='20px'
+        >
+          Crawl
+        </Button>
+      </InnerContainer>
+      <SeparateTextDiv className='col-sm-3 offset-sm-4'>
+        <h5>{' OR '}</h5>
+      </SeparateTextDiv>
+      <ConnectIgDiv className='col-sm-3 offset-sm-4'>
+        <AnchorButton href={InstaRedirect} role='button'>
+          Connect to Instagram
+          <SmallIcon
+            src={images.instaLogo}
+            className='d-inline-block align-top'
+            alt=''
           />
-          <Button
-            type='submit'
-            onClick={handleCrawlClick}
-            marginLeft='10px'
-            paddingHorizontal='20px'
-          >
-            Crawl
-          </Button>
-        </InnerContainer>
-        <SeparateTextDiv className='col-sm-3 offset-sm-4'>
-          <h5>{' OR '}</h5>
-        </SeparateTextDiv>
-        <ConnectIgDiv className='col-sm-3 offset-sm-4'>
-          <AnchorButton href={InstaRedirect} role='button'>
-            Connect to Instagram
-            <SmallIcon
-              src={images.instaLogo}
-              className='d-inline-block align-top'
-              alt=''
+        </AnchorButton>
+      </ConnectIgDiv>
+      <div className='col-sm-9 offset-sm-1'>
+        <TableHeadContainer>
+          <TableHeading>Previous crawl results</TableHeading>
+          <TableSearchContainer>
+            <TableSearchLabel htmlFor='inputPassword'>Search:</TableSearchLabel>
+            <TableSearchInput
+              type='text'
+              className='form-control'
+              id='inputSearchText'
+              onChange={handleTextInputChange}
+              value={searchText}
             />
-          </AnchorButton>
-        </ConnectIgDiv>
-        <div className='col-sm-9 offset-sm-1'>
-          <TableHeadContainer>
-            <TableHeading>Previous crawl results</TableHeading>
-            <TableSearchContainer>
-              <TableSearchLabel htmlFor='inputPassword'>
-                Search:
-              </TableSearchLabel>
-              <TableSearchInput
-                type='text'
-                className='form-control'
-                id='inputSearchText'
-                onChange={handleTextInputChange}
-                value={searchText}
-              />
-            </TableSearchContainer>
-          </TableHeadContainer>
-          <Table className='table'>
-            <thead className='thead-dark'>
-              <tr>{renderColumnHeadings()}</tr>
-            </thead>
-            <tbody>{data.dataLoading ? <tr /> : renderMediaRows()}</tbody>
-          </Table>
-          {data.dataLoading ? (
-            <div className='col-sm-5 offset-sm-5'>
-              <ClipLoader sizeUnit={'px'} size={50} color={'#123abc'} loading />
-            </div>
-          ) : (
-            <PagginationDiv>
-              <Pagination
-                activePage={currentPage}
-                itemsCountPerPage={pageSize}
-                totalItemsCount={data.mediaCount}
-                pageRangeDisplayed={5}
-                onChange={handlePageChange}
-                itemClass='page-item'
-                linkClass='page-link'
-              />
-            </PagginationDiv>
-          )}
-        </div>
+          </TableSearchContainer>
+        </TableHeadContainer>
+        <Table className='table'>
+          <thead className='thead-dark'>
+            <tr>{renderColumnHeadings()}</tr>
+          </thead>
+          <tbody>{dataLoading ? <tr /> : renderMediaRows()}</tbody>
+        </Table>
+        {dataLoading ? (
+          <div className='col-sm-5 offset-sm-5'>
+            <ClipLoader sizeUnit={'px'} size={50} color={'#123abc'} loading />
+          </div>
+        ) : (
+          <PagginationDiv>
+            <Pagination
+              activePage={currentPage}
+              itemsCountPerPage={pageSize}
+              totalItemsCount={mediaCount}
+              pageRangeDisplayed={5}
+              onChange={handlePageChange}
+              itemClass='page-item'
+              linkClass='page-link'
+            />
+          </PagginationDiv>
+        )}
       </div>
     </div>
   )
