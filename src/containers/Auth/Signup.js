@@ -5,25 +5,32 @@ import {
   clearNewUser
 } from '../../actions/AuthActions'
 import { connect, useSelector } from 'react-redux'
-import { validateEmail } from '../../config/static'
+import { validateEmail } from '../../config/utils'
 import { ToastsStore } from 'react-toasts'
 import Button from '../../components/Button'
+import { Container, FormInput } from '../../config/commonStyles'
 import {
-  LoginRow,
   LoginColumn,
   SwitchModeDiv,
   SwitchModeLink,
-  RequiredLabel
+  RequiredLabel,
+  Form,
+  FormGroup,
+  ButtonContainer,
+  InputLable,
+  Paragraph
 } from './styled'
+import { newUserSelector, errorMsgSelector } from '../../selectors/index'
 
 const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
   // local state
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  // redux state
-  const errorMessage = useSelector(state => state.user.errorMessage)
-  const newUser = useSelector(state => state.user.newUser)
+  // redux state selectors
+  const state = useSelector(state => state)
+  const errorMessage = errorMsgSelector(state)
+  const newUser = newUserSelector(state)
   useEffect(
     () => {
       if (newUser) {
@@ -68,58 +75,53 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
     }
   }
   return (
-    <div className='container'>
-      <LoginRow className='row'>
-        <LoginColumn className='col-sm-5 offset-sm-4'>
-          <form>
-            <div className='form-group'>
-              <RequiredLabel htmlFor='inputUsername'>Username</RequiredLabel>
-              <input
-                type='text'
-                value={username}
-                className='form-control'
-                id='inputUsername'
-                placeholder='Enter Username'
-                onChange={handleTextInputChange}
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='inputEmail'>Email address</label>
-              <input
-                type='email'
-                value={email}
-                className='form-control'
-                id='inputEmail'
-                placeholder='Enter email'
-                onChange={handleTextInputChange}
-              />
-            </div>
-            <div className='form-group'>
-              <RequiredLabel htmlFor='inputPassword'>Password</RequiredLabel>
-              <input
-                type='password'
-                value={password}
-                className='form-control'
-                id='inputPassword'
-                placeholder='Password'
-                onChange={handleTextInputChange}
-              />
-            </div>
-          </form>
-          <div className='col-sm-6 offset-sm-3'>
-            <Button type='submit' onClick={() => handleSignupBtnClick()}>
-              Signup
-            </Button>
-          </div>
-          <SwitchModeDiv>
-            <p>Already have an account?</p>
-            <SwitchModeLink onClick={() => history.push('/login')}>
-              Login
-            </SwitchModeLink>
-          </SwitchModeDiv>
-        </LoginColumn>
-      </LoginRow>
-    </div>
+    <Container>
+      <LoginColumn sm={{ span: 5, offset: 4 }}>
+        <Form>
+          <FormGroup>
+            <RequiredLabel htmlFor='inputUsername'>Username</RequiredLabel>
+            <FormInput
+              type='text'
+              value={username}
+              id='inputUsername'
+              placeholder='Enter Username'
+              onChange={handleTextInputChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <InputLable htmlFor='inputEmail'>Email address</InputLable>
+            <FormInput
+              type='email'
+              value={email}
+              id='inputEmail'
+              placeholder='Enter email'
+              onChange={handleTextInputChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <RequiredLabel htmlFor='inputPassword'>Password</RequiredLabel>
+            <FormInput
+              type='password'
+              value={password}
+              id='inputPassword'
+              placeholder='Password'
+              onChange={handleTextInputChange}
+            />
+          </FormGroup>
+        </Form>
+        <ButtonContainer sm={{ span: 6, offset: 3 }}>
+          <Button type='submit' onClick={() => handleSignupBtnClick()}>
+            Signup
+          </Button>
+        </ButtonContainer>
+        <SwitchModeDiv>
+          <Paragraph>Already have an account?</Paragraph>
+          <SwitchModeLink onClick={() => history.push('/login')}>
+            Login
+          </SwitchModeLink>
+        </SwitchModeDiv>
+      </LoginColumn>
+    </Container>
   )
 }
 

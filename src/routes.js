@@ -1,6 +1,5 @@
 import React from 'react'
-import { Router, Switch, Route, Redirect } from 'react-router-dom'
-import history from './config/history'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import Header from '../src/components/Header/Header'
 import {
   LoginScreen,
@@ -24,7 +23,7 @@ const Routes = () => {
     />
   )
   return (
-    <Router history={history}>
+    <BrowserRouter>
       {auth ? <Header /> : <div />}
       <Route path='/login' component={LoginScreen} />
       <Route path='/signup' component={SignupScreen} />
@@ -39,7 +38,7 @@ const Routes = () => {
           component={IgPageResults}
         />
       </Switch>
-    </Router>
+    </BrowserRouter>
   )
 }
 

@@ -1,11 +1,6 @@
 import styled from 'styled-components'
-
-const InnerContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 20px;
-  margin-bottom: 10px;
-`
+import { FormInput } from '../../config/commonStyles'
+import { Col, Table as bootTable, Image } from 'react-bootstrap'
 
 const TableHeadContainer = styled.div`
   display: flex;
@@ -14,7 +9,7 @@ const TableHeadContainer = styled.div`
 `
 
 const TableHeading = styled.h4`
-  margin-left: 5px;
+  margin-left: 0.4rem;
 `
 
 const TableSearchContainer = styled.div`
@@ -26,68 +21,97 @@ const TableSearchLabel = styled.label`
   align-self: center;
 `
 
-const TableSearchInput = styled.input`
-  margin-bottom: 5px;
-  margin-left: 2px;
+const TableSearchInput = styled(FormInput)`
+  margin-bottom: 0.4rem;
+  margin-left: 0.3rem;
 `
 
-const Table = styled.table`
-  background-color: #fff;
-  margin-bottom: 1px;
+const Table = styled(bootTable)`
+  background-color: ${props => props.theme.light};
+  margin-bottom: 0.05rem;
 `
+
+const TableRow = styled.tr``
+const TableData = styled.td``
+const TableHeadRow = styled.th``
 
 const PagginationDiv = styled.div`
-  float: right;
-  margin-bottom: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end
+  margin-bottom: 2rem;
 `
 
 const DetailColumn = styled.td`
-  color: #1565c0;
   cursor: pointer;
 `
 
-const SeparateTextDiv = styled.div`
+const SeparateTextDiv = styled(Col)`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 `
-const ConnectIgDiv = styled.div`
+const ConnectIgDiv = styled(Col)`
   display: flex;
   flex-direction: row;
-  margin-bottom: 30px;
+  margin-bottom: 0.2rem;
 `
 
-const SmallIcon = styled.img`
-  margin-left: 4px;
-  width: 30;
-  height: 30px;
+const SmallIcon = styled(Image)`
+  margin-left: 0.5rem;
+  width: 2rem;
+  height: 2rem;
 `
 
-const MediaDetailsDiv = styled.div`
-  margin-top: 20px;
-  margin-bottom: 30px;
+const MediaDetailsDiv = styled(Col)`
+  margin-top: 2rem;
+  margin-bottom: 3rem;
 `
 
-const InstagramFullImg = styled.img`
-  width: 600px;
-  height: 400px;
-  margin-bottom: 10px;
+const InstagramFullImg = styled(Image)`
+  width: 30rem;
+  max-height: 18rem;
+  margin-bottom: 1rem;
 `
+
+const Anchor = styled.a``
+const H5 = styled.h5``
+const THead = styled.thead`
+  background-color: ${props => props.theme.dark}
+  color: ${props => props.theme.light};
+`
+const TBody = styled.tbody``
+const TableContainer = styled(Col)``
+const LoadingContainer = styled(Col)``
+
+const MediaContainer = styled.div``
+const MediaDetailContainer = styled.div``
 
 export {
-  InnerContainer,
   TableHeadContainer,
   TableHeading,
   TableSearchContainer,
   TableSearchLabel,
   TableSearchInput,
   Table,
+  TableRow,
+  TableData,
+  TableHeadRow,
+  THead,
+  TBody,
   PagginationDiv,
   DetailColumn,
   SeparateTextDiv,
   ConnectIgDiv,
   SmallIcon,
   MediaDetailsDiv,
-  InstagramFullImg
+  InstagramFullImg,
+  FormInput,
+  Anchor,
+  H5,
+  TableContainer,
+  LoadingContainer,
+  MediaContainer,
+  MediaDetailContainer
 }

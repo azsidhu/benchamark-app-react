@@ -7,9 +7,24 @@ const authSelector = createSelector(
   user => user.auth
 )
 
+const errorMsgSelector = createSelector(
+  userSelector,
+  user => user.errorMessage
+)
+const newUserSelector = createSelector(
+  userSelector,
+  user => user.newUser
+)
+
 const tokenSelector = createSelector(
   authSelector,
   auth => auth.access
 )
 
-export { userSelector, authSelector, tokenSelector }
+export {
+  userSelector,
+  authSelector,
+  tokenSelector,
+  errorMsgSelector,
+  newUserSelector
+}
