@@ -22,6 +22,8 @@
     "react-toasts": "^3.0.3",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
+    "shortid": "^2.2.15",
     "styled-components": "^4.3.2"
   },
   "scripts": {
