@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router, Switch, Route, Redirect } from 'react-router-dom'
 import history from './config/history'
-import Header from '../src/components/Header'
+import Header from '../src/components/Header/Header'
 import {
   LoginScreen,
   SignupScreen,
@@ -34,7 +34,10 @@ const Routes = () => {
         <PrivateRoute path='/igconnect' component={IgConnect} />
         <PrivateRoute path='/twconnect' component={TwConnect} />
         <PrivateRoute path='/igconnected' component={IgConnected} />
-        <PrivateRoute path='/igPageResults/:mediaId' component={IgPageResults} />
+        <PrivateRoute
+          path='/igPageResults/:mediaId'
+          component={IgPageResults}
+        />
       </Switch>
     </Router>
   )

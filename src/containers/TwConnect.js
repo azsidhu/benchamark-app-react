@@ -1,22 +1,27 @@
 import React from 'react'
-import '../styles/IgConnect.css'
-import '../styles/Global.css'
+import styled from 'styled-components'
+import Button from '../components/Button'
+
+const InnerContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  margin-bottom: 10px;
+`
 
 const TwConnect = ({ history }) => {
   return (
     <div>
       <div className='container'>
-        <div
-          className='col-sm-3 offset-sm-4'
-          id='innerContainer'
-        >
-          <button
+        <InnerContainer className='col-sm-3 offset-sm-4'>
+          <Button
             type='submit'
-            className='btn btn-primary btn-md connectBtn'
+            className='btn btn-primary btn-md'
+            marginLeft='10px'
           >
             Twitter connect
-          </button>
-        </div>
+          </Button>
+        </InnerContainer>
       </div>
     </div>
   )
