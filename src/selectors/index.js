@@ -11,7 +11,8 @@ import {
   dataLoadingSelector,
   mediaCountSelector,
   mediaIdsSelector,
-  mediaSelector
+  mediaSelector,
+  zipImagesLinkSelector
 } from './data'
 
 export {
@@ -25,5 +26,6 @@ export {
   mediaIdsSelector,
   mediaSelector,
   errorMsgSelector,
-  newUserSelector
+  newUserSelector,
+  zipImagesLinkSelector
 }

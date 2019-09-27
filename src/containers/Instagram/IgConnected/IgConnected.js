@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FetchNewData, fetchUserMedia } from '../../../actions/DataActions'
+import {
+  FetchNewData,
+  fetchUserMedia,
+  setCrawledImagesZIPlink
+} from '../../../actions/DataActions'
 import { connect, useSelector } from 'react-redux'
 import { ClipLoader } from 'react-spinners'
 import { pageSize } from '../../../config/utils'
@@ -8,6 +12,7 @@ import Pagination from 'react-js-pagination'
 import Button from '../../../components/Button'
 import { theme } from '../../../config/theme'
 import { Container, InnerContainer } from '../../../config/commonStyles'
+import Modal from '../../../components/Modal/Modal'
 import {
   TableHeadContainer,
   TableHeading,
@@ -30,11 +35,17 @@ import {
   mediaSelector,
   mediaCountSelector,
   mediaIdsSelector,
-  dataLoadingSelector
+  dataLoadingSelector,
+  zipImagesLinkSelector
 } from '../../../selectors/index'
-import { columnsToRender, extractRowData } from './helper'
+import {
+  columnsToRender,
+  extractRowData,
+  crawlerMsg,
+  actionBtnTitle
+} from './helper'
 
-const IgConnected = ({ history, FetchNewData }) => {
+const IgConnected = ({ history, FetchNewData, setCrawledImagesZIPlink }) => {
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
   // redux store selectors
@@ -44,6 +55,7 @@ const IgConnected = ({ history, FetchNewData }) => {
   const instaMediaIds = mediaIdsSelector(state)
   const dataLoading = dataLoadingSelector(state)
   const mediaCount = mediaCountSelector(state)
+  const zipImagesLink = zipImagesLinkSelector(state)
 
   useEffect(
     () => {
@@ -90,16 +102,17 @@ const IgConnected = ({ history, FetchNewData }) => {
       )
     })
   }
+  const onCloseModal = () => {
+    setCrawledImagesZIPlink(null)
+  }
+  const onActionBtnClick = () => {
+    window.open(zipImagesLink)
+    setCrawledImagesZIPlink(null)
+  }
   return (
     <Container>
       <InnerContainer sm={{ span: 2, offset: 0 }}>
-        <Button
-          type='submit'
-          onClick={handleCrawlClick}
-          marginTop='2rem'
-          marginBottom='1rem'
-          paddingVerticle='.4em'
-        >
+        <Button type='submit' onClick={handleCrawlClick}>
           Crawl again
         </Button>
       </InnerContainer>
@@ -140,10 +153,19 @@ const IgConnected = ({ history, FetchNewData }) => {
           </PagginationDiv>
         )}
       </TableContainer>
+      {!zipImagesLink || (
+        <Modal
+          bodyString={crawlerMsg}
+          actionBtnTitle={actionBtnTitle}
+          hideHeading
+          onCloseModal={onCloseModal}
+          onActionBtnClick={onActionBtnClick}
+        />
+      )}
     </Container>
   )
 }
 export default connect(
   null,
-  { FetchNewData, fetchUserMedia }
+  { FetchNewData, fetchUserMedia, setCrawledImagesZIPlink }
 )(IgConnected)

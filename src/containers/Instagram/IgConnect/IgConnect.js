@@ -34,10 +34,10 @@ import {
   TableHeadRow,
   THead,
   TBody,
-  FormInput,
   H5,
   TableContainer,
-  LoadingContainer
+  LoadingContainer,
+  CrawlUserInput
 } from '../styled'
 import {
   tokenSelector,
@@ -143,18 +143,13 @@ const IgConnect = ({
   return (
     <Container>
       <InnerContainer sm={{ span: 3, offset: 4 }}>
-        <FormInput
+        <CrawlUserInput
           type='text'
           id='inputIgUser'
           placeholder='Enter Insta username'
           onChange={handleTextInputChange}
         />
-        <Button
-          type='submit'
-          onClick={handleCrawlClick}
-          marginLeft='.6rem'
-          paddingHorizontal='1rem'
-        >
+        <Button type='submit' onClick={handleCrawlClick} variant='primary'>
           Crawl
         </Button>
       </InnerContainer>

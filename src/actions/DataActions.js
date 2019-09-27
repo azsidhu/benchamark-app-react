@@ -10,7 +10,8 @@ import {
   ADD_USER_MEDIA,
   DATA_LOADING,
   SET_IGCONNECT_SEARCH_TEXT,
-  SET_SELECTED_MEDIA
+  SET_SELECTED_MEDIA,
+  SET_ZIP_LINK
 } from './types'
 import { makeRequest } from './request'
 import { ToastsStore } from 'react-toasts'
@@ -146,7 +147,7 @@ export const CrawledImagesDownload = (token, crawlerID) => {
         if (response.config) {
           dispatch(stopDataLoadingSpinner())
           console.log('Crawled images download response: ', response.config)
-          window.open(response.config.url)
+          dispatch(setCrawledImagesZIPlink(response.config.url))
         }
       })
       .catch(error => {
@@ -162,6 +163,12 @@ const addUserMedia = payload => {
 export const setIgConnectSearchText = searchText => {
   return dispatch => {
     dispatch(setSearchText(searchText))
+  }
+}
+
+export const setCrawledImagesZIPlink = link => {
+  return dispatch => {
+    dispatch(addCrawledImagesZIPlink(link))
   }
 }
 
@@ -191,4 +198,8 @@ const setSearchText = searchText => {
 
 const setMedia = media => {
   return { type: SET_SELECTED_MEDIA, payload: media }
+}
+
+const addCrawledImagesZIPlink = link => {
+  return { type: SET_ZIP_LINK, payload: link }
 }
