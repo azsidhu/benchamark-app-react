@@ -33,9 +33,13 @@ const CrawlUserInput = styled(FormInput)`
 const Table = styled(bootTable)`
   background-color: ${props => props.theme.light};
   margin-bottom: 0.05rem;
+  border-collapse: separate;
+  border-spacing: 0.5em;
 `
 
-const TableRow = styled.tr``
+const TableRow = styled.tr`
+  padding-top: 2rem;
+`
 const TableData = styled.td``
 const TableHeadRow = styled.th``
 

@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   instaMedia: {},
   instaMediaIds: [],
   mediaCount: 0,
+  nextMedia: null,
   dataLoading: false,
   igConnectSearchText: '',
   selectedMedia: null,
@@ -25,11 +26,18 @@ const DataReducer = (state = INITIAL_STATE, action) => {
       return { ...state, dataLoading: action.payload }
     case ADD_USER_MEDIA:
       let normalizedMedia = normalize(action.payload.results, mediaSchema)
+      let { ids, normalizedData } = concatNewData(
+        state.instaMediaIds,
+        state.instaMedia,
+        normalizedMedia.result,
+        normalizedMedia.entities.media
+      )
       return {
         ...state,
-        instaMedia: normalizedMedia.entities.media,
-        instaMediaIds: normalizedMedia.result,
-        mediaCount: action.payload.count
+        instaMedia: normalizedData,
+        instaMediaIds: ids,
+        mediaCount: action.payload.count,
+        nextMedia: action.payload.next
       }
     case SET_IGCONNECT_SEARCH_TEXT:
       return { ...state, igConnectSearchText: action.payload }
@@ -43,3 +51,14 @@ const DataReducer = (state = INITIAL_STATE, action) => {
 }
 
 export { DataReducer }
+
+const concatNewData = (ids, normalizedData, newIds, newNormalizedData) => {
+  for (let newId of newIds) { // eslint-disable-line no-unused-vars
+    if (!ids.includes(newId)) {
+      ids = ids.concat(newId)
+      normalizedData[newId] = newNormalizedData[newId]
+    }
+  }
+
+  return { ids, normalizedData }
+}

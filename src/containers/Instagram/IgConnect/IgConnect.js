@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { images } from '../../../assets/images'
 import { connect, useSelector } from 'react-redux'
 import { theme } from '../../../config/theme'
@@ -9,8 +9,6 @@ import {
   setSelectedMedia
 } from '../../../actions/DataActions'
 import { Link } from 'react-router-dom'
-import { pageSize } from '../../../config/utils'
-import Pagination from 'react-js-pagination'
 import { ToastsStore } from 'react-toasts'
 import { InstaRedirect } from '../../../config/urls'
 import { ClipLoader } from 'react-spinners'
@@ -24,7 +22,7 @@ import {
   TableSearchLabel,
   TableSearchInput,
   Table,
-  PagginationDiv,
+  PagginationDiv as DummyDiv,
   DetailColumn,
   SeparateTextDiv,
   ConnectIgDiv,
@@ -42,7 +40,7 @@ import {
 import {
   tokenSelector,
   mediaSelector,
-  mediaCountSelector,
+  // mediaCountSelector,
   mediaIdsSelector,
   igConnectSearchTextSelector,
   dataLoadingSelector
@@ -56,6 +54,7 @@ const IgConnect = ({
   setIgConnectSearchText,
   setSelectedMedia
 }) => {
+  const DummyDivRef = useRef(null)
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
   const [username, setUsername] = useState('')
@@ -65,9 +64,22 @@ const IgConnect = ({
   const accessToken = tokenSelector(state)
   const instaMedia = mediaSelector(state)
   const instaMediaIds = mediaIdsSelector(state)
-  const mediaCount = mediaCountSelector(state)
+  // const mediaCount = mediaCountSelector(state)
   const dataLoading = dataLoadingSelector(state)
   const igConnectSearchText = igConnectSearchTextSelector(state)
+
+  const isInViewport = useCallback(
+    (offset = 0) => {
+      let element = DummyDivRef.current
+      if (element) {
+        const top = element.getBoundingClientRect().top
+        if (top + offset >= 0 && top - Math.abs(offset) <= window.innerHeight) {
+          setCurrentPage(currentPage + 1)
+        }
+      }
+    },
+    [currentPage]
+  )
 
   useEffect(
     () => {
@@ -75,18 +87,35 @@ const IgConnect = ({
         setSearchText(igConnectSearchText)
         setIgConnectSearchText('')
       }
+      console.log('currentPage in useeffect: ', currentPage)
       fetchUserMedia(
         accessToken,
         currentPage,
         searchText.length > 1 ? searchText : ''
       )
-    },
-    [currentPage, searchText] // eslint-disable-line
+    }, // eslint-disable-next-line
+    [currentPage, searchText, accessToken, igConnectSearchText]
   )
+
+  useEffect(
+    () => {
+      const attachListener = () => {
+        window.addEventListener('scroll', () => isInViewport(), true)
+      }
+
+      const removeListener = () => {
+        window.removeEventListener('scroll', isInViewport())
+      }
+      attachListener()
+      return () => {
+        removeListener()
+      }
+    },
+    [isInViewport]
+  )
+
   // helper methods for component
-  const handlePageChange = pageNumber => {
-    setCurrentPage(Number(pageNumber))
-  }
+
   const renderMediaRows = () => {
     return instaMediaIds.map(id => {
       const rowData = extractRowData(instaMedia, id)
@@ -140,6 +169,7 @@ const IgConnect = ({
       setSearchText(event.target.value)
     }
   }
+
   return (
     <Container>
       <InnerContainer sm={{ span: 3, offset: 4 }}>
@@ -183,7 +213,7 @@ const IgConnect = ({
           <THead>
             <TableRow>{renderColumnHeadings()}</TableRow>
           </THead>
-          <TBody>{dataLoading || renderMediaRows()}</TBody>
+          <TBody>{renderMediaRows()}</TBody>
         </Table>
         {dataLoading ? (
           <LoadingContainer sm={{ span: 5, offset: 5 }}>
@@ -195,17 +225,7 @@ const IgConnect = ({
             />
           </LoadingContainer>
         ) : (
-          <PagginationDiv>
-            <Pagination
-              activePage={currentPage}
-              itemsCountPerPage={pageSize}
-              totalItemsCount={mediaCount}
-              pageRangeDisplayed={5}
-              onChange={handlePageChange}
-              itemClass='page-item'
-              linkClass='page-link'
-            />
-          </PagginationDiv>
+          <DummyDiv ref={DummyDivRef} />
         )}
       </TableContainer>
     </Container>

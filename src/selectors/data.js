@@ -17,6 +17,11 @@ const mediaCountSelector = createSelector(
   data => data.mediaCount
 )
 
+const nextMediaSelector = createSelector(
+  dataSelector,
+  data => data.nextMedia
+)
+
 const dataLoadingSelector = createSelector(
   dataSelector,
   data => data.dataLoading
@@ -42,6 +47,7 @@ export {
   igConnectSearchTextSelector,
   dataLoadingSelector,
   mediaCountSelector,
+  nextMediaSelector,
   mediaIdsSelector,
   mediaSelector,
   zipImagesLinkSelector
