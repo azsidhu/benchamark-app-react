@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FetchNewData, fetchUserMedia } from '../../actions/DataActions'
+import { FetchNewData, fetchUserMedia } from '../../../actions/DataActions'
 import { connect, useSelector } from 'react-redux'
 import { ClipLoader } from 'react-spinners'
-import { pageSize } from '../../config/static'
+import { pageSize } from '../../../config/utils'
 import Pagination from 'react-js-pagination'
-import Button from '../../components/Button'
-import shortid from 'shortid'
+import Button from '../../../components/Button'
+import { theme } from '../../../config/theme'
+import { Container, InnerContainer } from '../../../config/commonStyles'
 import {
   TableHeadContainer,
   TableHeading,
@@ -15,18 +16,25 @@ import {
   TableSearchInput,
   Table,
   PagginationDiv,
-  DetailColumn
-} from './styled'
+  DetailColumn,
+  TableRow,
+  TableData,
+  THead,
+  TBody,
+  TableHeadRow,
+  LoadingContainer,
+  TableContainer
+} from '../styled'
 import {
   tokenSelector,
   mediaSelector,
   mediaCountSelector,
   mediaIdsSelector,
   dataLoadingSelector
-} from '../../selectors/index'
-var moment = require('moment')
+} from '../../../selectors/index'
+import { columnsToRender, extractRowData } from './helper'
 
-const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
+const IgConnected = ({ history, FetchNewData }) => {
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
   // redux store selectors
@@ -56,83 +64,68 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
     setCurrentPage(Number(pageNumber))
   }
   const renderMediaRows = () => {
-    return instaMediaIds.map((id, index) => {
-      const { created_at } = instaMedia[id]
-      const { media_type, likes_count, comments_count } = instaMedia[
-        id
-      ].media_insights[0]
+    return instaMediaIds.map(id => {
+      const rowData = extractRowData(instaMedia, id)
       return (
-        <tr key={shortid.generate()}>
-          {renderColumnData([
-            id,
-            media_type,
-            moment(created_at).format('lll'),
-            likes_count,
-            comments_count
-          ])}
+        <TableRow key={id}>
+          {renderColumnData(rowData)}
           <DetailColumn>
             <Link to='/igPageResults'>details</Link>
           </DetailColumn>
-        </tr>
+        </TableRow>
       )
     })
   }
   const renderColumnData = dataList => {
-    return dataList.map((item, index) => {
-      return <td key={shortid.generate()}>{item}</td>
+    return dataList.map(item => {
+      return <TableData key={item.key}>{item.value}</TableData>
     })
   }
   const renderColumnHeadings = () => {
-    let columnsToRender = [
-      'Id',
-      'Media type',
-      'Crawl time',
-      'Likes',
-      'Comments',
-      'Visit'
-    ]
-    return columnsToRender.map((item, index) => {
+    return columnsToRender.map(item => {
       return (
-        <th scope='col' key={shortid.generate()}>
-          {item}
-        </th>
+        <TableHeadRow scope='col' key={item.key}>
+          {item.value}
+        </TableHeadRow>
       )
     })
   }
   return (
-    <div className='container'>
-      <div className='col-sm-2'>
+    <Container>
+      <InnerContainer sm={{ span: 2, offset: 0 }}>
         <Button
           type='submit'
           onClick={handleCrawlClick}
-          marginTop='20px'
-          marginBottom='10px'
+          marginTop='2rem'
+          marginBottom='1rem'
+          paddingVerticle='.4em'
         >
           Crawl again
         </Button>
-      </div>
-      <div className='col-sm-9 offset-sm-1'>
+      </InnerContainer>
+      <TableContainer sm={{ span: 9, offset: 1 }}>
         <TableHeadContainer>
           <TableHeading>Recent crawl results</TableHeading>
           <TableSearchContainer>
             <TableSearchLabel htmlFor='inputPassword'>Search:</TableSearchLabel>
-            <TableSearchInput
-              type='text'
-              className='form-control'
-              id='inputSearchText'
-            />
+            <TableSearchInput type='text' id='inputSearchText' />
           </TableSearchContainer>
         </TableHeadContainer>
-        <Table className='table'>
-          <thead className='thead-dark'>
-            <tr>{renderColumnHeadings()}</tr>
-          </thead>
-          <tbody>{renderMediaRows()}</tbody>
+        <Table>
+          <THead>
+            <TableRow>{renderColumnHeadings()}</TableRow>
+          </THead>
+          <TBody>{dataLoading || renderMediaRows()}</TBody>
         </Table>
         {dataLoading ? (
-          <div className='col-sm-5 offset-sm-5'>
-            <ClipLoader sizeUnit={'px'} size={50} color={'#123abc'} loading />
-          </div>
+          <LoadingContainer sm={{ span: 5, offset: 5 }}>
+            <ClipLoader
+              sizeUnit={'rem'}
+              size={4}
+              color={theme.loaderColor}
+              loading
+            />
+          </LoadingContainer>
         ) : (
           <PagginationDiv>
             <Pagination
@@ -146,8 +139,8 @@ const IgConnected = ({ history, FetchNewData, fetchUserMedia }) => {
             />
           </PagginationDiv>
         )}
-      </div>
-    </div>
+      </TableContainer>
+    </Container>
   )
 }
 export default connect(

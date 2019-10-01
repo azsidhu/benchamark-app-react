@@ -2,45 +2,40 @@ import React from 'react'
 import CustomNavLink from '../CustomNavLink'
 import { connect } from 'react-redux'
 import { logoutUser } from '../../actions/AuthActions'
+import { HeaderLogoURL } from '../../config/urls'
 import {
   HeaderImage,
   NavListItem,
   LogoutText,
   LogoutDiv,
-  TopNav
+  TopNav,
+  NavLogoContainer,
+  NavListContainer,
+  NavList
 } from './styled'
+import { navList } from './helper'
 
 const Header = ({ logoutUser }) => {
-  let toLinks = ['/fbconnect', '/igconnect', '/twconnect']
-  let linkText = ['Facebook', 'Instagram', 'Twitter']
-  const handleLogoutBtnClick = () => {
-    logoutUser()
-  }
+  const handleLogoutBtnClick = () => logoutUser()
   const renderNavItem = () => {
-    return toLinks.map((link, index) => {
+    return navList.map(link => {
       return (
-        <NavListItem className='nav-item' key={index}>
-          <CustomNavLink to={link} text={linkText[index]} />
+        <NavListItem key={link.key}>
+          <CustomNavLink to={link.linkPath} text={link.linkText} />
         </NavListItem>
       )
     })
   }
   return (
-    <TopNav className='navbar navbar-expand-lg navbar-dark bg-dark topNav'>
-      <p className='navbar-brand'>
-        <HeaderImage
-          src='https://getbootstrap.com/docs/4.3/assets/brand/bootstrap-solid.svg'
-          className='d-inline-block align-top'
-          alt=''
-        />
-      </p>
-      <div className='collapse navbar-collapse'>
-        <ul className='navbar-nav'>{renderNavItem()}</ul>
-      </div>
+    <TopNav expand='lg'>
+      <NavLogoContainer>
+        <HeaderImage src={HeaderLogoURL} />
+      </NavLogoContainer>
+      <NavListContainer>
+        <NavList>{renderNavItem()}</NavList>
+      </NavListContainer>
       <LogoutDiv>
-        <LogoutText className='nav-link' onClick={handleLogoutBtnClick}>
-          Logout
-        </LogoutText>
+        <LogoutText onClick={handleLogoutBtnClick}>Logout</LogoutText>
       </LogoutDiv>
     </TopNav>
   )

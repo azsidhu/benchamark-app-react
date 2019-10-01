@@ -1,18 +1,12 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
+import { HoverStyle } from '../config/commonStyles'
 
-const HoverStyle = css`
-  background-color: #0069d9;
-`
 const Button = styled.button`
   display: block;
   width: 100%;
-  color: #fff;
-  background-color: #007bff;
-  padding: 0.25rem 0.5rem;
-  padding: ${props =>
-    props.paddingHorizontal
-      ? `0.25rem ${props.paddingHorizontal}`
-      : '0.25rem 0.5rem'};
+  color: ${props => props.theme.white};
+  background-color: ${props => props.theme.buttonBackground};
+  padding: ${props => `${props.paddingVerticle} ${props.paddingHorizontal}`};
   margin-left: ${props => props.marginLeft};
   margin-top: ${props => props.marginTop};
   margin-bottom: ${props => props.marginBottom};
@@ -31,5 +25,9 @@ const Button = styled.button`
     ${HoverStyle}
   }
 `
+Button.defaultProps = {
+  paddingHorizontal: '0.25rem',
+  paddingVerticle: '0.25rem'
+}
 
 export default Button

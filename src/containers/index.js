@@ -1,10 +1,10 @@
 import LoginScreen from './Auth/Login'
 import SignupScreen from './Auth/Signup'
-import FbConnect from './FbConnect'
-import IgConnect from './Instagram/IgConnect'
-import TwConnect from './TwConnect'
-import IgConnected from './Instagram/IgConnected'
-import IgPageResults from './Instagram/IgPageResults'
+import FbConnect from './Facebook/FbConnect/FbConnect'
+import IgConnect from './Instagram/IgConnect/IgConnect'
+import TwConnect from './Twitter/TwConnect/TwConnect'
+import IgConnected from './Instagram/IgConnected/IgConnected'
+import IgPageResults from './Instagram/PageResults/IgPageResults'
 
 export {
   LoginScreen,

@@ -1,4 +1,10 @@
-import { userSelector, authSelector, tokenSelector } from './auth'
+import {
+  userSelector,
+  authSelector,
+  tokenSelector,
+  errorMsgSelector,
+  newUserSelector
+} from './auth'
 import {
   selectedMediaSelector,
   igConnectSearchTextSelector,
@@ -17,5 +23,7 @@ export {
   dataLoadingSelector,
   mediaCountSelector,
   mediaIdsSelector,
-  mediaSelector
+  mediaSelector,
+  errorMsgSelector,
+  newUserSelector
 }

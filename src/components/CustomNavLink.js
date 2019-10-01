@@ -1,10 +1,15 @@
 import React from 'react'
 import { Route, NavLink, withRouter } from 'react-router-dom'
-import { Colors } from '../config/colors'
+import { theme } from '../config/theme'
 import styled from 'styled-components'
 
 const NavItem = styled(NavLink)`
   cursor: pointer;
+  color: ${props => props.theme.white};
+  &:hover {
+    text-decoration: none;
+    color: ${props => props.theme.activeLinkColor};
+  }
 `
 const CustomNavLink = ({ to, location, text }) => {
   return (
@@ -14,7 +19,6 @@ const CustomNavLink = ({ to, location, text }) => {
         <NavItem
           replace={to === location.pathname}
           to={to}
-          className='nav-link'
           activeStyle={activeStyles}
         >
           {text}
@@ -26,7 +30,7 @@ const CustomNavLink = ({ to, location, text }) => {
 
 const activeStyles = {
   fontWeight: 'bold',
-  color: Colors.activeLinkColor
+  color: theme.activeLinkColor
 }
 
 export default withRouter(CustomNavLink)
