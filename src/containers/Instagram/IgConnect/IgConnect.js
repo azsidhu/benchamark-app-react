@@ -22,7 +22,7 @@ import {
   TableSearchLabel,
   TableSearchInput,
   Table,
-  PagginationDiv as DummyDivRef,
+  PagginationDiv as DummyDiv,
   DetailColumn,
   SeparateTextDiv,
   ConnectIgDiv,
@@ -72,13 +72,9 @@ const IgConnect = ({
     (offset = 0) => {
       let element = DummyDivRef.current
       if (element) {
-        console.log('currentPage in isInViewport: ', currentPage)
         const top = element.getBoundingClientRect().top
         if (top + offset >= 0 && top - Math.abs(offset) <= window.innerHeight) {
-          console.log('ha, its visible')
           setCurrentPage(currentPage + 1)
-        } else {
-          console.log('element not visible')
         }
       }
     },
