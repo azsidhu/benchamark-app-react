@@ -3,7 +3,8 @@ import {
   DATA_LOADING,
   SET_IGCONNECT_SEARCH_TEXT,
   SET_SELECTED_MEDIA,
-  ADD_MEDIA_DETAIL
+  ADD_MEDIA_DETAIL,
+  SET_ZIP_LINK
 } from '../actions/types'
 import { normalize } from 'normalizr'
 import { mediaSchema } from '../config/schema'
@@ -14,7 +15,8 @@ const INITIAL_STATE = {
   mediaCount: 0,
   dataLoading: false,
   igConnectSearchText: '',
-  selectedMedia: null
+  selectedMedia: null,
+  zipImagesLink: null
 }
 
 const DataReducer = (state = INITIAL_STATE, action) => {
@@ -33,6 +35,8 @@ const DataReducer = (state = INITIAL_STATE, action) => {
       return { ...state, igConnectSearchText: action.payload }
     case SET_SELECTED_MEDIA || ADD_MEDIA_DETAIL:
       return { ...state, selectedMedia: action.payload }
+    case SET_ZIP_LINK:
+      return { ...state, zipImagesLink: action.payload }
     default:
       return { ...state }
   }

@@ -6,9 +6,7 @@ const TwConnect = () => {
   return (
     <Container>
       <InnerContainer sm={{ span: 3, offset: 4 }}>
-        <Button type='submit' marginLeft='.5rem' paddingVerticle='.5em'>
-          Twitter connect
-        </Button>
+        <Button type='submit'>Twitter connect</Button>
       </InnerContainer>
     </Container>
   )

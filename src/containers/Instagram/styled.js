@@ -26,6 +26,10 @@ const TableSearchInput = styled(FormInput)`
   margin-left: 0.3rem;
 `
 
+const CrawlUserInput = styled(FormInput)`
+  margin-right: 0.3rem;
+`
+
 const Table = styled(bootTable)`
   background-color: ${props => props.theme.light};
   margin-bottom: 0.05rem;
@@ -88,6 +92,12 @@ const LoadingContainer = styled(Col)``
 const MediaContainer = styled.div``
 const MediaDetailContainer = styled.div``
 
+const PageTopContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+`
+
 export {
   TableHeadContainer,
   TableHeading,
@@ -113,5 +123,7 @@ export {
   TableContainer,
   LoadingContainer,
   MediaContainer,
-  MediaDetailContainer
+  MediaDetailContainer,
+  PageTopContainer,
+  CrawlUserInput
 }

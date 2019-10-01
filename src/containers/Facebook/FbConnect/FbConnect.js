@@ -6,9 +6,7 @@ const FbConnect = () => {
   return (
     <Container>
       <InnerContainer sm={{ span: 3, offset: 4 }}>
-        <Button type='submit' marginLeft='.5rem' paddingVerticle='.5em'>
-          Facebook connect
-        </Button>
+        <Button type='submit'>Facebook connect</Button>
       </InnerContainer>
     </Container>
   )

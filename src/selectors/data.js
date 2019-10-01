@@ -32,11 +32,17 @@ const selectedMediaSelector = createSelector(
   data => data.selectedMedia
 )
 
+const zipImagesLinkSelector = createSelector(
+  dataSelector,
+  data => data.zipImagesLink
+)
+
 export {
   selectedMediaSelector,
   igConnectSearchTextSelector,
   dataLoadingSelector,
   mediaCountSelector,
   mediaIdsSelector,
-  mediaSelector
+  mediaSelector,
+  zipImagesLinkSelector
 }

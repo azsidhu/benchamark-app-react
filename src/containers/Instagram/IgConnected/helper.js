@@ -23,4 +23,7 @@ const extractRowData = (media, id) => {
   ]
 }
 
-export { columnsToRender, extractRowData }
+let crawlerMsg = 'Download all crawled media zip'
+let actionBtnTitle = 'Download Zip'
+
+export { columnsToRender, extractRowData, crawlerMsg, actionBtnTitle }
