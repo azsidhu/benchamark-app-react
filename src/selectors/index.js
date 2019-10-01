@@ -10,6 +10,7 @@ import {
   igConnectSearchTextSelector,
   dataLoadingSelector,
   mediaCountSelector,
+  nextMediaSelector,
   mediaIdsSelector,
   mediaSelector,
   zipImagesLinkSelector
@@ -23,6 +24,7 @@ export {
   igConnectSearchTextSelector,
   dataLoadingSelector,
   mediaCountSelector,
+  nextMediaSelector,
   mediaIdsSelector,
   mediaSelector,
   errorMsgSelector,
