@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { loginUser, clearError } from '../../actions/AuthActions'
-import { connect, useSelector } from 'react-redux'
 import { ToastsStore } from 'react-toasts'
-import Button from '../../components/Button'
-import { Container, FormInput } from '../../config/commonStyles'
+import Button from '../../../components/Button'
+import { Container, FormInput } from '../../../config/commonStyles'
 import {
   LoginColumn,
   SwitchModeDiv,
@@ -13,17 +11,19 @@ import {
   FormGroup,
   ButtonContainer,
   Paragraph
-} from './styled'
-import { authSelector, errorMsgSelector } from '../../selectors/index'
+} from '../styled'
 
-const Login = ({ history, loginUser, clearError }) => {
+export const Login = ({
+  history,
+  loginUser,
+  clearError,
+  errorMessage,
+  auth
+}) => {
   // local state
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  // redux store selectors
-  const state = useSelector(state => state)
-  const errorMessage = errorMsgSelector(state)
-  const auth = authSelector(state)
+  // lifecycle hooks
   useEffect(
     () => {
       if (auth) {
@@ -92,8 +92,3 @@ const Login = ({ history, loginUser, clearError }) => {
     </Container>
   )
 }
-
-export default connect(
-  null,
-  { loginUser, clearError }
-)(Login)

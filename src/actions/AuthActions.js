@@ -58,6 +58,7 @@ export const registerUser = credentails => {
       })
       .catch(error => {
         console.log('signup user error: ', error)
+        console.log('error.response: ', error.response)
         if (!error.response) {
           dispatch(
             setAuthError(

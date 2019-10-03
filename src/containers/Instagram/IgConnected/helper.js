@@ -1,6 +1,6 @@
 import { timeConverter } from '../../../config/utils'
 
-const columnsToRender = [
+export const columnsToRender = [
   { key: 0, value: 'Id' },
   { key: 1, value: 'Media type' },
   { key: 2, value: 'Crawl time' },
@@ -9,7 +9,7 @@ const columnsToRender = [
   { key: 5, value: 'Visit' }
 ]
 
-const extractRowData = (media, id) => {
+export const extractRowData = (media, id) => {
   const { created_at } = media[id]
   const { media_type, likes_count, comments_count } = media[
     id
@@ -23,7 +23,5 @@ const extractRowData = (media, id) => {
   ]
 }
 
-let crawlerMsg = 'Download all crawled media zip'
-let actionBtnTitle = 'Download Zip'
-
-export { columnsToRender, extractRowData, crawlerMsg, actionBtnTitle }
+export const crawlerMsg = 'Download all crawled media zip'
+export const actionBtnTitle = 'Download Zip'

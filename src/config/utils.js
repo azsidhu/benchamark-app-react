@@ -1,13 +1,13 @@
-const validateEmail = email => {
+export const validateEmail = email => {
   let re = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(String(email).toLowerCase())
 }
 
-const log = (string, variable) => {
+export const log = (string, variable) => {
   console.log(string, ': ', variable)
 }
 
-const timeConverter = datetimeString => {
+export const timeConverter = datetimeString => {
   let monthNames = [
     'Jan',
     'Feb',
@@ -35,7 +35,7 @@ const timeConverter = datetimeString => {
   )}`
 }
 
-const formatTime = (hours, minutes) => {
+export const formatTime = (hours, minutes) => {
   let ampm = hours >= 12 ? 'PM' : 'AM'
   hours = hours % 12
   hours = hours || 12
@@ -44,6 +44,4 @@ const formatTime = (hours, minutes) => {
 }
 
 // Temporary
-const pageSize = 10
-
-export { validateEmail, log, pageSize, timeConverter, formatTime }
+export const pageSize = 10

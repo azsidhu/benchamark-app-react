@@ -1,4 +1,4 @@
-const theme = {
+export const theme = {
   white: '#fff',
   activeLinkColor: 'aquamarine',
   cardBackground: '#fff',
@@ -9,5 +9,3 @@ const theme = {
   dark: '#343a40',
   light: '#fff'
 }
-
-export { theme }

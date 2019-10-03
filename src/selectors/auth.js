@@ -1,30 +1,22 @@
 import { createSelector } from 'reselect'
 
-const userSelector = state => state.user
+export const userSelector = state => state.user
 
-const authSelector = createSelector(
+export const authSelector = createSelector(
   userSelector,
   user => user.auth
 )
 
-const errorMsgSelector = createSelector(
+export const errorMsgSelector = createSelector(
   userSelector,
   user => user.errorMessage
 )
-const newUserSelector = createSelector(
+export const newUserSelector = createSelector(
   userSelector,
   user => user.newUser
 )
 
-const tokenSelector = createSelector(
+export const tokenSelector = createSelector(
   authSelector,
-  auth => auth.access
+  auth => (auth ? auth.access : null)
 )
-
-export {
-  userSelector,
-  authSelector,
-  tokenSelector,
-  errorMsgSelector,
-  newUserSelector
-}

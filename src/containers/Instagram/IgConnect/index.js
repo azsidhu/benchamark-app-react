@@ -1,20 +1,14 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { images } from '../../../assets/images'
-import { connect, useSelector } from 'react-redux'
 import { theme } from '../../../config/theme'
-import {
-  fetchUserMedia,
-  CrawlNewUser,
-  setIgConnectSearchText,
-  setSelectedMedia
-} from '../../../actions/DataActions'
-import { Link } from 'react-router-dom'
 import { ToastsStore } from 'react-toasts'
 import { InstaRedirect } from '../../../config/urls'
 import { ClipLoader } from 'react-spinners'
 import Button from '../../../components/Button'
 import AnchorButton from '../../../components/AnchorButton'
 import { Container, InnerContainer } from '../../../config/commonStyles'
+import { MediaRows } from './components/MediaRows'
+import { ColumnHeadings } from './components/ColumnHeadings'
 import {
   TableHeadContainer,
   TableHeading,
@@ -23,13 +17,10 @@ import {
   TableSearchInput,
   Table,
   PagginationDiv as DummyDiv,
-  DetailColumn,
   SeparateTextDiv,
   ConnectIgDiv,
   SmallIcon,
   TableRow,
-  TableData,
-  TableHeadRow,
   THead,
   TBody,
   H5,
@@ -37,37 +28,26 @@ import {
   LoadingContainer,
   CrawlUserInput
 } from '../styled'
-import {
-  tokenSelector,
-  mediaSelector,
-  // mediaCountSelector,
-  mediaIdsSelector,
-  igConnectSearchTextSelector,
-  dataLoadingSelector
-} from '../../../selectors/index'
-import { columnsToRender, extractRowData } from './helper'
 
-const IgConnect = ({
+export const IgConnect = ({
   history,
   fetchUserMedia,
   CrawlNewUser,
   setIgConnectSearchText,
-  setSelectedMedia
+  setSelectedMedia,
+  accessToken,
+  igConnectSearchText,
+  instaMedia,
+  instaMediaIds,
+  dataLoading
 }) => {
   const DummyDivRef = useRef(null)
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
   const [username, setUsername] = useState('')
   const [searchText, setSearchText] = useState('')
-  // redux store selectors
-  const state = useSelector(state => state)
-  const accessToken = tokenSelector(state)
-  const instaMedia = mediaSelector(state)
-  const instaMediaIds = mediaIdsSelector(state)
-  // const mediaCount = mediaCountSelector(state)
-  const dataLoading = dataLoadingSelector(state)
-  const igConnectSearchText = igConnectSearchTextSelector(state)
 
+  // lifecycle methods
   const isInViewport = useCallback(
     (offset = 0) => {
       let element = DummyDivRef.current
@@ -87,7 +67,7 @@ const IgConnect = ({
         setSearchText(igConnectSearchText)
         setIgConnectSearchText('')
       }
-      console.log('currentPage in useeffect: ', currentPage)
+      // console.log('currentPage in useeffect: ', currentPage)
       fetchUserMedia(
         accessToken,
         currentPage,
@@ -115,44 +95,6 @@ const IgConnect = ({
   )
 
   // helper methods for component
-
-  const renderMediaRows = () => {
-    return instaMediaIds.map(id => {
-      const rowData = extractRowData(instaMedia, id)
-      return (
-        <TableRow key={id}>
-          {renderColumnData(rowData)}
-          <DetailColumn>
-            <Link
-              to={`/igPageResults/${id}`}
-              onClick={() => {
-                setIgConnectSearchText(searchText)
-                setSelectedMedia(instaMedia[id])
-              }}
-            >
-              details
-            </Link>
-          </DetailColumn>
-        </TableRow>
-      )
-    })
-  }
-
-  const renderColumnData = dataList => {
-    return dataList.map(item => {
-      return <TableData key={item.key}>{item.value}</TableData>
-    })
-  }
-
-  const renderColumnHeadings = () => {
-    return columnsToRender.map(item => {
-      return (
-        <TableHeadRow scope='col' key={item.key}>
-          {item.value}
-        </TableHeadRow>
-      )
-    })
-  }
 
   const handleCrawlClick = () => {
     if (username.trim().length === 0) {
@@ -211,9 +153,19 @@ const IgConnect = ({
         </TableHeadContainer>
         <Table>
           <THead>
-            <TableRow>{renderColumnHeadings()}</TableRow>
+            <TableRow>
+              <ColumnHeadings />
+            </TableRow>
           </THead>
-          <TBody>{renderMediaRows()}</TBody>
+          <TBody>
+            <MediaRows
+              instaMedia={instaMedia}
+              instaMediaIds={instaMediaIds}
+              setIgConnectSearchText={setIgConnectSearchText}
+              searchText={searchText}
+              setSelectedMedia={setSelectedMedia}
+            />
+          </TBody>
         </Table>
         {dataLoading ? (
           <LoadingContainer sm={{ span: 5, offset: 5 }}>
@@ -231,12 +183,3 @@ const IgConnect = ({
     </Container>
   )
 }
-export default connect(
-  null,
-  {
-    fetchUserMedia,
-    CrawlNewUser,
-    setIgConnectSearchText,
-    setSelectedMedia
-  }
-)(IgConnect)
