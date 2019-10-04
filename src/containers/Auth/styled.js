@@ -30,7 +30,7 @@ export const RequiredLabel = styled(InputLable)`
 `
 
 export const Form = styled(bootForm)`
-  padding: 0em 1em;
+  padding: 0em 1.6em;
 `
 export const FormGroup = styled(bootForm.Group)``
 export const ButtonContainer = styled(Col)``

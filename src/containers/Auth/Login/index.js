@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { ToastsStore } from 'react-toasts'
-import Button from '../../../components/Button'
+import { theme } from '../../../config/theme'
+import { Button } from '../../../components/Button/index'
 import { Container, FormInput } from '../../../config/commonStyles'
 import {
   LoginColumn,
@@ -30,11 +31,10 @@ export const Login = ({
         history.push('/igconnect')
       }
     },
-    [auth] // eslint-disable-line
+    [auth], // eslint-disable-line
   )
   if (errorMessage.length !== 0) {
     ToastsStore.error(errorMessage)
-    setPassword('')
     clearError()
   }
   // local helper methods
@@ -43,7 +43,10 @@ export const Login = ({
       ToastsStore.error('username can not be empty')
     } else if (password.trim().length === 0) {
       ToastsStore.error('password can not be empty')
-    } else loginUser({ username: username, password: password })
+    } else {
+      loginUser({ username: username, password: password })
+      setPassword('')
+    }
   }
   const handleTextInputChange = event => {
     if (event.target.id === 'inputUsername') {
@@ -64,6 +67,9 @@ export const Login = ({
               id='inputUsername'
               placeholder='Enter Username'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
           <FormGroup>
@@ -74,11 +80,18 @@ export const Login = ({
               id='inputPassword'
               placeholder='Password'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
         </Form>
         <ButtonContainer sm={{ span: 6, offset: 3 }}>
-          <Button type='submit' onClick={() => handleLoginBtnClick()}>
+          <Button
+            backgroundColor={theme.buttonBackground}
+            hoverBackground={theme.buttonHover}
+            onClick={() => handleLoginBtnClick()}
+          >
             Login
           </Button>
         </ButtonContainer>

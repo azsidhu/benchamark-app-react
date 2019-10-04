@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ClipLoader } from 'react-spinners'
 import { pageSize } from '../../../config/utils'
 import Pagination from 'react-js-pagination'
-import Button from '../../../components/Button'
+import { Button } from '../../../components/Button/index'
 import { theme } from '../../../config/theme'
 import { Container, InnerContainer } from '../../../config/commonStyles'
 import Modal from '../../../components/Modal/Modal'
@@ -67,7 +67,11 @@ export const IgConnected = ({
   return (
     <Container>
       <InnerContainer sm={{ span: 2, offset: 0 }}>
-        <Button type='submit' onClick={handleCrawlClick}>
+        <Button
+          backgroundColor={theme.buttonBackground}
+          hoverBackground={theme.buttonHover}
+          onClick={handleCrawlClick}
+        >
           Crawl again
         </Button>
       </InnerContainer>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { validateEmail } from '../../../config/utils'
+import { theme } from '../../../config/theme'
 import { ToastsStore } from 'react-toasts'
-import Button from '../../../components/Button'
+import { Button } from '../../../components/Button/index'
 import { Container, FormInput } from '../../../config/commonStyles'
 import {
   LoginColumn,
@@ -38,7 +39,7 @@ export const Signup = ({
         clearNewUser()
       }
     },
-    [newUser] // eslint-disable-line
+    [newUser], // eslint-disable-line
   )
   if (errorMessage.length !== 0) {
     ToastsStore.error(errorMessage)
@@ -83,6 +84,9 @@ export const Signup = ({
               id='inputUsername'
               placeholder='Enter Username'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
           <FormGroup>
@@ -93,6 +97,9 @@ export const Signup = ({
               id='inputEmail'
               placeholder='Enter email'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
           <FormGroup>
@@ -103,11 +110,18 @@ export const Signup = ({
               id='inputPassword'
               placeholder='Password'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
         </Form>
         <ButtonContainer sm={{ span: 6, offset: 3 }}>
-          <Button type='submit' onClick={() => handleSignupBtnClick()}>
+          <Button
+            backgroundColor={theme.buttonBackground}
+            hoverBackground={theme.buttonHover}
+            onClick={() => handleSignupBtnClick()}
+          >
             Signup
           </Button>
         </ButtonContainer>

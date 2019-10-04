@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import Button from '../../components/Button'
+import { Button } from '../../components/Button/index'
+import { theme } from '../../config/theme'
 import { BootModal, ButtonContainer, ModalContainer } from './styled'
 
 const Modal = ({
@@ -38,12 +39,22 @@ const Modal = ({
         <BootModal.Body>{bodyString}</BootModal.Body>
         <BootModal.Footer>
           <ButtonContainer sm={{ span: 6, offset: 4 }}>
-            <Button onClick={handleClose} variant='secondary'>
+            <Button
+              onClick={handleClose}
+              backgroundColor={theme.buttonBackground}
+              hoverBackground={theme.buttonHover}
+            >
               Close
             </Button>
           </ButtonContainer>
           <ButtonContainer sm={{ span: 3, offset: 2 }}>
-            <Button onClick={handleAction}>{actionBtnTitle}</Button>
+            <Button
+              backgroundColor={theme.buttonBackground}
+              hoverBackground={theme.buttonHover}
+              onClick={handleAction}
+            >
+              {actionBtnTitle}
+            </Button>
           </ButtonContainer>
         </BootModal.Footer>
       </BootModal>

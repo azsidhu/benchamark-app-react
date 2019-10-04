@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
-import { Container as bootContainer, Form, Col } from 'react-bootstrap'
+import { Container as bootContainer, Col } from 'react-bootstrap'
+import { Input } from '../components/Input/index'
 
 export const HoverStyle = css`
   background-color: ${props => props.theme.buttonHover};
@@ -11,4 +12,4 @@ export const InnerContainer = styled(Col)`
   margin-bottom: 1rem;
 `
 export const Container = styled(bootContainer)``
-export const FormInput = styled(Form.Control)``
+export const FormInput = styled(Input)``

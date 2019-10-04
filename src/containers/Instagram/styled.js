@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { FormInput } from '../../config/commonStyles'
-import { Col, Table as bootTable, Image } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
+import { Image } from '../../components/Image/index'
+import { Table as customTable } from '../../components/Table/index'
 
 export const TableHeadContainer = styled.div`
   display: flex;
@@ -21,24 +23,14 @@ export const TableSearchLabel = styled.label`
   align-self: center;
 `
 
-export const TableSearchInput = styled(FormInput)`
-  margin-bottom: 0.4rem;
-  margin-left: 0.3rem;
-`
+export const TableSearchInput = styled(FormInput)``
 
-export const CrawlUserInput = styled(FormInput)`
-  margin-right: 0.3rem;
-`
+export const CrawlUserInput = styled(FormInput)``
 
-export const Table = styled(bootTable)`
-  background-color: ${props => props.theme.light};
-  margin-bottom: 0.05rem;
-  border-collapse: separate;
-  border-spacing: 0.4em;
-`
+export const Table = styled(customTable)``
 
 export const TableRow = styled.tr`
-  padding-top: 2rem;
+  padding-top: 3rem;
 `
 export const TableData = styled.td``
 export const TableHeadRow = styled.th``
@@ -66,24 +58,21 @@ export const ConnectIgDiv = styled(Col)`
   margin-bottom: 0.2rem;
 `
 
-export const SmallIcon = styled(Image)`
-  margin-left: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-`
+export const SmallIcon = styled(Image)``
 
 export const MediaDetailsDiv = styled(Col)`
   margin-top: 2rem;
   margin-bottom: 3rem;
 `
 
-export const InstagramFullImg = styled(Image)`
-  width: 30rem;
-  max-height: 18rem;
-  margin-bottom: 1rem;
-`
+export const InstagramFullImg = styled(Image)``
 
-export const Anchor = styled.a``
+export const Anchor = styled.a`
+  width: 100%;
+  :hover {
+    text-decoration: none;
+  }
+`
 export const H5 = styled.h5``
 export const THead = styled.thead`
   background-color: ${props => props.theme.dark}

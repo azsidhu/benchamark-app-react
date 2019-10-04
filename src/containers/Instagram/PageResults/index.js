@@ -44,7 +44,12 @@ export const PageResults = ({
           <InstagramFullImg
             src={media ? media.media_url : ''}
             thumbnail
-            rounded
+            marginBottom='1rem'
+            maxHeight='18rem'
+            width='30rem'
+            scaleX='-1'
+            padding='.2rem'
+            borderWidth='.1rem'
           />
         </MediaContainer>
         <MediaDetailContainer>

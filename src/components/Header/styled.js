@@ -1,12 +1,8 @@
 import styled from 'styled-components'
-import { Navbar, Nav, Image } from 'react-bootstrap'
+import { Navbar, Nav } from 'react-bootstrap'
+import { Image } from '../../components/Image/index'
 
-export const HeaderImage = styled(Image)`
-  margin-right: 7rem;
-  margin-bottom: 0.5rem;
-  width: 2.2em;
-  height: 2.2em;
-`
+export const HeaderImage = styled(Image)``
 
 export const NavListItem = styled.li`
   margin-left: 4rem;

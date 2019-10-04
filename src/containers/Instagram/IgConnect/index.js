@@ -4,8 +4,7 @@ import { theme } from '../../../config/theme'
 import { ToastsStore } from 'react-toasts'
 import { InstaRedirect } from '../../../config/urls'
 import { ClipLoader } from 'react-spinners'
-import Button from '../../../components/Button'
-import AnchorButton from '../../../components/AnchorButton'
+import { Button } from '../../../components/Button/index'
 import { Container, InnerContainer } from '../../../config/commonStyles'
 import { MediaRows } from './components/MediaRows'
 import { ColumnHeadings } from './components/ColumnHeadings'
@@ -26,7 +25,8 @@ import {
   H5,
   TableContainer,
   LoadingContainer,
-  CrawlUserInput
+  CrawlUserInput,
+  Anchor
 } from '../styled'
 
 export const IgConnect = ({
@@ -74,7 +74,7 @@ export const IgConnect = ({
         searchText.length > 1 ? searchText : ''
       )
     }, // eslint-disable-next-line
-    [currentPage, searchText, accessToken, igConnectSearchText]
+    [currentPage, searchText, accessToken, igConnectSearchText],
   )
 
   useEffect(
@@ -120,8 +120,15 @@ export const IgConnect = ({
           id='inputIgUser'
           placeholder='Enter Insta username'
           onChange={handleTextInputChange}
+          marginRight='.5rem'
+          borderColor={theme.lightGray}
         />
-        <Button type='submit' onClick={handleCrawlClick} variant='primary'>
+        <Button
+          fontSize='1rem'
+          backgroundColor={theme.buttonBackground}
+          hoverBackground={theme.buttonHover}
+          onClick={handleCrawlClick}
+        >
           Crawl
         </Button>
       </InnerContainer>
@@ -129,14 +136,24 @@ export const IgConnect = ({
         <H5>{' OR '}</H5>
       </SeparateTextDiv>
       <ConnectIgDiv sm={{ span: 3, offset: 4 }}>
-        <AnchorButton
-          href={InstaRedirect}
-          role='button'
-          paddingHorizontal='1rem'
-        >
-          Connect to Instagram
-          <SmallIcon src={images.instaLogo} />
-        </AnchorButton>
+        <Anchor href={InstaRedirect}>
+          <Button
+            fontSize='1rem'
+            fontFamily='Roboto'
+            backgroundColor={theme.buttonBackground}
+            hoverBackground={theme.buttonHover}
+            paddingHorizontal='.4rem'
+          >
+            Connect to Instagram
+            <SmallIcon
+              width='2rem'
+              height='2rem'
+              display='inline'
+              marginLeft='.4rem'
+              src={images.instaLogo}
+            />
+          </Button>
+        </Anchor>
       </ConnectIgDiv>
       <TableContainer sm={{ span: 9, offset: 1 }}>
         <TableHeadContainer>
@@ -148,10 +165,18 @@ export const IgConnect = ({
               id='inputSearchText'
               onChange={handleTextInputChange}
               value={searchText}
+              marginBottom='0.4rem'
+              marginLeft='0.3rem'
+              borderWidth='0rem'
+              placeholder='Search by any column'
             />
           </TableSearchContainer>
         </TableHeadContainer>
-        <Table>
+        <Table
+          backgroundColor={theme.light}
+          marginBottom='0.05rem'
+          borderSpacing='0.5em'
+        >
           <THead>
             <TableRow>
               <ColumnHeadings />
