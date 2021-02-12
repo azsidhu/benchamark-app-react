@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react'
-import { connect, useSelector } from 'react-redux'
-import { fetchMediaDetail } from '../../../actions/DataActions'
 import { Container } from '../../../config/commonStyles'
 import {
   TableHeadContainer,
@@ -15,19 +13,17 @@ import {
   MediaContainer,
   MediaDetailContainer
 } from '../styled'
-import { tokenSelector, selectedMediaSelector } from '../../../selectors/index'
 import { extractData } from './helper'
+import { TableRows } from './components/TableRows'
 
-const PageResults = ({
+export const PageResults = ({
   match: {
     params: { mediaId }
   },
-  fetchMediaDetail
+  fetchMediaDetail,
+  accessToken,
+  media
 }) => {
-  // redux store selectors
-  const state = useSelector(state => state)
-  const accessToken = tokenSelector(state)
-  const media = selectedMediaSelector(state)
   // local scope variables
   let mediaInsights = media ? media.media_insights[0] : null
   useEffect(
@@ -38,16 +34,6 @@ const PageResults = ({
     },
     [media] // eslint-disable-line
   )
-  const renderTableRows = mediaList => {
-    return mediaList.map(item => {
-      return (
-        <TableRow key={item.key}>
-          <TableData>{item.label}</TableData>
-          <TableData>{item.data}</TableData>
-        </TableRow>
-      )
-    })
-  }
   return (
     <Container>
       <MediaDetailsDiv sm={{ span: 10, offset: 1 }}>
@@ -58,7 +44,12 @@ const PageResults = ({
           <InstagramFullImg
             src={media ? media.media_url : ''}
             thumbnail
-            rounded
+            marginBottom='1rem'
+            maxHeight='18rem'
+            width='30rem'
+            scaleX='-1'
+            padding='.2rem'
+            borderWidth='.1rem'
           />
         </MediaContainer>
         <MediaDetailContainer>
@@ -71,7 +62,7 @@ const PageResults = ({
                     <Anchor href={media.media_url}>{media.media_url}</Anchor>
                   </TableData>
                 </TableRow>
-                {renderTableRows(extractData(mediaInsights))}
+                <TableRows mediaList={extractData(mediaInsights)} />
               </TBody>
             </Table>
           )}
@@ -80,7 +71,3 @@ const PageResults = ({
     </Container>
   )
 }
-export default connect(
-  null,
-  { fetchMediaDetail }
-)(PageResults)

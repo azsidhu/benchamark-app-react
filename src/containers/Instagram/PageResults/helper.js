@@ -1,6 +1,6 @@
 import { timeConverter } from '../../../config/utils'
 
-const extractData = media => {
+export const extractData = media => {
   return [
     { key: 0, label: 'Comments count', data: media.comments_count },
     { key: 1, label: 'Likes count', data: media.likes_count },
@@ -13,5 +13,3 @@ const extractData = media => {
     }
   ]
 }
-
-export { extractData }

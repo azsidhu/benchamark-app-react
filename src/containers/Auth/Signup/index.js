@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import {
-  registerUser,
-  clearError,
-  clearNewUser
-} from '../../actions/AuthActions'
-import { connect, useSelector } from 'react-redux'
-import { validateEmail } from '../../config/utils'
+import { validateEmail } from '../../../config/utils'
+import { theme } from '../../../config/theme'
 import { ToastsStore } from 'react-toasts'
-import Button from '../../components/Button'
-import { Container, FormInput } from '../../config/commonStyles'
+import { Button } from '../../../components/Button/index'
+import { Container, FormInput } from '../../../config/commonStyles'
 import {
   LoginColumn,
   SwitchModeDiv,
@@ -19,18 +14,21 @@ import {
   ButtonContainer,
   InputLable,
   Paragraph
-} from './styled'
-import { newUserSelector, errorMsgSelector } from '../../selectors/index'
+} from '../styled'
 
-const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
+export const Signup = ({
+  history,
+  registerUser,
+  clearError,
+  clearNewUser,
+  errorMessage,
+  newUser
+}) => {
   // local state
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  // redux state selectors
-  const state = useSelector(state => state)
-  const errorMessage = errorMsgSelector(state)
-  const newUser = newUserSelector(state)
+  // lifecycle hooks
   useEffect(
     () => {
       if (newUser) {
@@ -41,11 +39,10 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
         clearNewUser()
       }
     },
-    [newUser] // eslint-disable-line
+    [newUser], // eslint-disable-line
   )
   if (errorMessage.length !== 0) {
     ToastsStore.error(errorMessage)
-    setPassword('')
     clearError()
   }
   // local helper methods
@@ -63,6 +60,7 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
       setPassword('')
     } else {
       registerUser({ username: username, email: email, password: password })
+      setPassword('')
     }
   }
   const handleTextInputChange = event => {
@@ -86,6 +84,9 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
               id='inputUsername'
               placeholder='Enter Username'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
           <FormGroup>
@@ -96,6 +97,9 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
               id='inputEmail'
               placeholder='Enter email'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
           <FormGroup>
@@ -106,11 +110,18 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
               id='inputPassword'
               placeholder='Password'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
         </Form>
         <ButtonContainer sm={{ span: 6, offset: 3 }}>
-          <Button type='submit' onClick={() => handleSignupBtnClick()}>
+          <Button
+            backgroundColor={theme.buttonBackground}
+            hoverBackground={theme.buttonHover}
+            onClick={() => handleSignupBtnClick()}
+          >
             Signup
           </Button>
         </ButtonContainer>
@@ -124,8 +135,3 @@ const Signup = ({ history, registerUser, clearError, clearNewUser }) => {
     </Container>
   )
 }
-
-export default connect(
-  null,
-  { registerUser, clearError, clearNewUser }
-)(Signup)

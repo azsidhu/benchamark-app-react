@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
-import Header from '../src/components/Header/Header'
+import Header from '../src/components/Header/index'
 import {
   LoginScreen,
   SignupScreen,

@@ -1,6 +1,6 @@
 import { timeConverter } from '../../../config/utils'
 
-const columnsToRender = [
+export const columnsToRender = [
   { key: 0, value: 'Id' },
   { key: 1, value: 'Insta uid' },
   { key: 2, value: 'Media type' },
@@ -11,7 +11,7 @@ const columnsToRender = [
   { key: 7, value: 'Visit' }
 ]
 
-const extractRowData = (media, id) => {
+export const extractRowData = (media, id) => {
   const { created_at, insta_user_id } = media[id]
   const { media_type, likes_count, comments_count, filter_used } = media[
     id
@@ -26,4 +26,3 @@ const extractRowData = (media, id) => {
     { key: 6, value: comments_count }
   ]
 }
-export { columnsToRender, extractRowData }

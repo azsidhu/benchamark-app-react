@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import {
-  FetchNewData,
-  fetchUserMedia,
-  setCrawledImagesZIPlink
-} from '../../../actions/DataActions'
-import { connect, useSelector } from 'react-redux'
 import { ClipLoader } from 'react-spinners'
 import { pageSize } from '../../../config/utils'
 import Pagination from 'react-js-pagination'
-import Button from '../../../components/Button'
+import { Button } from '../../../components/Button/index'
 import { theme } from '../../../config/theme'
 import { Container, InnerContainer } from '../../../config/commonStyles'
 import Modal from '../../../components/Modal/Modal'
@@ -21,42 +14,31 @@ import {
   TableSearchInput,
   Table,
   PagginationDiv,
-  DetailColumn,
   TableRow,
-  TableData,
   THead,
   TBody,
-  TableHeadRow,
   LoadingContainer,
   TableContainer
 } from '../styled'
-import {
-  tokenSelector,
-  mediaSelector,
-  mediaCountSelector,
-  mediaIdsSelector,
-  dataLoadingSelector,
-  zipImagesLinkSelector
-} from '../../../selectors/index'
-import {
-  columnsToRender,
-  extractRowData,
-  crawlerMsg,
-  actionBtnTitle
-} from './helper'
+import { crawlerMsg, actionBtnTitle } from './helper'
+import { MediaRows } from './components/MediaRows'
+import { ColumnHeadings } from './components/ColumnHeadings'
 
-const IgConnected = ({ history, FetchNewData, setCrawledImagesZIPlink }) => {
+export const IgConnected = ({
+  history,
+  FetchNewData,
+  setCrawledImagesZIPlink,
+  accessToken,
+  instaMedia,
+  instaMediaIds,
+  dataLoading,
+  mediaCount,
+  zipImagesLink
+}) => {
   // local state variables
   const [currentPage, setCurrentPage] = useState(1)
-  // redux store selectors
-  const state = useSelector(state => state)
-  const accessToken = tokenSelector(state)
-  const instaMedia = mediaSelector(state)
-  const instaMediaIds = mediaIdsSelector(state)
-  const dataLoading = dataLoadingSelector(state)
-  const mediaCount = mediaCountSelector(state)
-  const zipImagesLink = zipImagesLinkSelector(state)
 
+  // lifecycle hooks
   useEffect(
     () => {
       if (window.location.href.split('#')[1] && !dataLoading) {
@@ -75,33 +57,6 @@ const IgConnected = ({ history, FetchNewData, setCrawledImagesZIPlink }) => {
   const handlePageChange = pageNumber => {
     setCurrentPage(Number(pageNumber))
   }
-  const renderMediaRows = () => {
-    return instaMediaIds.map(id => {
-      const rowData = extractRowData(instaMedia, id)
-      return (
-        <TableRow key={id}>
-          {renderColumnData(rowData)}
-          <DetailColumn>
-            <Link to='/igPageResults'>details</Link>
-          </DetailColumn>
-        </TableRow>
-      )
-    })
-  }
-  const renderColumnData = dataList => {
-    return dataList.map(item => {
-      return <TableData key={item.key}>{item.value}</TableData>
-    })
-  }
-  const renderColumnHeadings = () => {
-    return columnsToRender.map(item => {
-      return (
-        <TableHeadRow scope='col' key={item.key}>
-          {item.value}
-        </TableHeadRow>
-      )
-    })
-  }
   const onCloseModal = () => {
     setCrawledImagesZIPlink(null)
   }
@@ -112,7 +67,11 @@ const IgConnected = ({ history, FetchNewData, setCrawledImagesZIPlink }) => {
   return (
     <Container>
       <InnerContainer sm={{ span: 2, offset: 0 }}>
-        <Button type='submit' onClick={handleCrawlClick}>
+        <Button
+          backgroundColor={theme.buttonBackground}
+          hoverBackground={theme.buttonHover}
+          onClick={handleCrawlClick}
+        >
           Crawl again
         </Button>
       </InnerContainer>
@@ -126,9 +85,18 @@ const IgConnected = ({ history, FetchNewData, setCrawledImagesZIPlink }) => {
         </TableHeadContainer>
         <Table>
           <THead>
-            <TableRow>{renderColumnHeadings()}</TableRow>
+            <TableRow>
+              <ColumnHeadings />
+            </TableRow>
           </THead>
-          <TBody>{dataLoading || renderMediaRows()}</TBody>
+          <TBody>
+            {dataLoading || (
+              <MediaRows
+                instaMediaIds={instaMediaIds}
+                instaMedia={instaMedia}
+              />
+            )}
+          </TBody>
         </Table>
         {dataLoading ? (
           <LoadingContainer sm={{ span: 5, offset: 5 }}>
@@ -165,7 +133,3 @@ const IgConnected = ({ history, FetchNewData, setCrawledImagesZIPlink }) => {
     </Container>
   )
 }
-export default connect(
-  null,
-  { FetchNewData, fetchUserMedia, setCrawledImagesZIPlink }
-)(IgConnected)

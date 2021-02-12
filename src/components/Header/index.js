@@ -29,7 +29,13 @@ const Header = ({ logoutUser }) => {
   return (
     <TopNav expand='lg'>
       <NavLogoContainer>
-        <HeaderImage src={HeaderLogoURL} />
+        <HeaderImage
+          marginRight='7rem'
+          marginBottom='0.5rem'
+          width='2.2em'
+          height='2.2em'
+          src={HeaderLogoURL}
+        />
       </NavLogoContainer>
       <NavListContainer>
         <NavList>{renderNavItem()}</NavList>

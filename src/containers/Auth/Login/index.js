@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { loginUser, clearError } from '../../actions/AuthActions'
-import { connect, useSelector } from 'react-redux'
 import { ToastsStore } from 'react-toasts'
-import Button from '../../components/Button'
-import { Container, FormInput } from '../../config/commonStyles'
+import { theme } from '../../../config/theme'
+import { Button } from '../../../components/Button/index'
+import { Container, FormInput } from '../../../config/commonStyles'
 import {
   LoginColumn,
   SwitchModeDiv,
@@ -13,28 +12,29 @@ import {
   FormGroup,
   ButtonContainer,
   Paragraph
-} from './styled'
-import { authSelector, errorMsgSelector } from '../../selectors/index'
+} from '../styled'
 
-const Login = ({ history, loginUser, clearError }) => {
+export const Login = ({
+  history,
+  loginUser,
+  clearError,
+  errorMessage,
+  auth
+}) => {
   // local state
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  // redux store selectors
-  const state = useSelector(state => state)
-  const errorMessage = errorMsgSelector(state)
-  const auth = authSelector(state)
+  // lifecycle hooks
   useEffect(
     () => {
       if (auth) {
         history.push('/igconnect')
       }
     },
-    [auth] // eslint-disable-line
+    [auth], // eslint-disable-line
   )
   if (errorMessage.length !== 0) {
     ToastsStore.error(errorMessage)
-    setPassword('')
     clearError()
   }
   // local helper methods
@@ -43,7 +43,10 @@ const Login = ({ history, loginUser, clearError }) => {
       ToastsStore.error('username can not be empty')
     } else if (password.trim().length === 0) {
       ToastsStore.error('password can not be empty')
-    } else loginUser({ username: username, password: password })
+    } else {
+      loginUser({ username: username, password: password })
+      setPassword('')
+    }
   }
   const handleTextInputChange = event => {
     if (event.target.id === 'inputUsername') {
@@ -64,6 +67,9 @@ const Login = ({ history, loginUser, clearError }) => {
               id='inputUsername'
               placeholder='Enter Username'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
           <FormGroup>
@@ -74,11 +80,18 @@ const Login = ({ history, loginUser, clearError }) => {
               id='inputPassword'
               placeholder='Password'
               onChange={handleTextInputChange}
+              paddingHorizontal='.4rem'
+              width='90%'
+              borderColor={theme.lightGray}
             />
           </FormGroup>
         </Form>
         <ButtonContainer sm={{ span: 6, offset: 3 }}>
-          <Button type='submit' onClick={() => handleLoginBtnClick()}>
+          <Button
+            backgroundColor={theme.buttonBackground}
+            hoverBackground={theme.buttonHover}
+            onClick={() => handleLoginBtnClick()}
+          >
             Login
           </Button>
         </ButtonContainer>
@@ -92,8 +105,3 @@ const Login = ({ history, loginUser, clearError }) => {
     </Container>
   )
 }
-
-export default connect(
-  null,
-  { loginUser, clearError }
-)(Login)
